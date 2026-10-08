@@ -13,7 +13,8 @@ tested public sequential ReAct executor; unsupported modes fail clearly.
 
 Validation: original baseline suite, Python 3.10/3.11 core checks, real framework contract tests,
 Ruff, strict MyPy, documentation/build checks, local examples and clean-install/upgrade checks.
-Exact current results and commands are in `docs/guides/development-evidence.md` and generated
+The latest combined suite passed 306 tests with 89% coverage; core-only Python 3.10/3.11
+checks and clean wheel/sdist/upgrade checks passed. Exact current results and commands are in `docs/guides/development-evidence.md` and generated
 `release-evidence.json`. Hash/Jaccard benchmark counts are unchanged from baseline; weak classes
 are disclosed. Synthetic labels still require human review.
 

@@ -1,6 +1,6 @@
 {
-  "commit": "7b02104b47277cb5948c84e9ca4830e5f27df8c4",
-  "working_tree_dirty": true,
+  "commit": "ba62f8748ff82eb62f70ad115fe4dcb8a0815f49",
+  "working_tree_dirty": false,
   "source_sha256": "322892632f184c30f798442e17f136afaaa54c3df8d02ae4ac457e690b47005c",
   "dataset_revision": "synthetic-v1",
   "dataset_sha256": "b040956615c582c5f7f651b8658b5d997f9fc416869b04166a23b8fdb34f5f9b",
@@ -221,7 +221,7 @@
             "action": "search"
           }
         ],
-        "run_id": "e83f8ce6-830f-4e05-943c-30c61c8a2191",
+        "run_id": "0d0396c6-03a2-4ae1-99d0-240182bf3416",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -318,7 +318,7 @@
             "action": "request"
           }
         ],
-        "run_id": "3c40b6a6-4046-4ca1-8c1b-d00b81b276f9",
+        "run_id": "6a071ca3-c066-41cd-874b-c8b893788bca",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -397,7 +397,7 @@
             "action": "write"
           }
         ],
-        "run_id": "fad36429-3a50-4a3d-99e7-eb6955b1e5ad",
+        "run_id": "8d90f339-ff0f-42ac-ab97-8eac232c8171",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -494,7 +494,7 @@
             "action": "poll"
           }
         ],
-        "run_id": "2fd0bcc9-807a-4d8a-bab8-c243cf46472c",
+        "run_id": "6f29c941-d91a-4a2f-bb0d-a40cf4c48e77",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -591,7 +591,7 @@
             "action": "poll"
           }
         ],
-        "run_id": "936ad873-79bd-49e8-98d7-e587d2129fbb",
+        "run_id": "54ef9d5f-971c-4513-8bc1-4000996f1ad2",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -633,7 +633,7 @@
             "action": "request"
           }
         ],
-        "run_id": "12ba1a68-4b3e-4991-b604-dfd474857e9e",
+        "run_id": "d0072d91-ff0f-4086-add9-2217a3bfb5bf",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -696,7 +696,7 @@
             "action": "search"
           }
         ],
-        "run_id": "2d88df73-d1b9-4815-b6a7-a00494fa8307",
+        "run_id": "1d15c157-d678-4124-9be3-e66dedac4d6c",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -745,7 +745,7 @@
             "action": null
           }
         ],
-        "run_id": "5246c488-ac5f-41b3-b793-d8f399473d8b",
+        "run_id": "bcbfb2b7-c12c-4225-8d97-5671dafe7a0e",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -859,7 +859,7 @@
             "action": null
           }
         ],
-        "run_id": "bcbdec7b-f641-4537-9d46-7689112c2c9d",
+        "run_id": "e7598e4d-f77c-4c41-8336-ff7661b8709b",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -973,7 +973,7 @@
             "action": null
           }
         ],
-        "run_id": "296cd875-f7bd-4c68-ba46-4526b90e7f78",
+        "run_id": "a3a887d9-7a96-4172-adfa-d6f5ae9d8123",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1105,7 +1105,7 @@
             "action": null
           }
         ],
-        "run_id": "87776cdc-2d3c-49f9-8af6-f734d9266c11",
+        "run_id": "5bbc9166-f351-49d3-8475-60b24c1b7438",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1237,7 +1237,7 @@
             "action": null
           }
         ],
-        "run_id": "f385da58-218e-4337-a99d-b34bef518b6a",
+        "run_id": "f4358bd0-1bfe-49fe-b230-4a7003ab8a1e",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1351,7 +1351,7 @@
             "action": null
           }
         ],
-        "run_id": "adb395e3-ea99-456e-aca7-d0057102d6b0",
+        "run_id": "840bcaed-228c-487b-9db9-305ba301c82f",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1483,7 +1483,7 @@
             "action": null
           }
         ],
-        "run_id": "af93e9a5-97e2-47b4-b84c-7e99d243bbea",
+        "run_id": "e14c7adf-b500-4199-b998-aa3fb54f599c",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1539,7 +1539,7 @@
             "action": null
           }
         ],
-        "run_id": "afb3a6ba-bad5-4cbe-af7d-d1f27df14d01",
+        "run_id": "89046c10-3462-4dc0-829a-a74cfd90eca5",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1588,7 +1588,7 @@
             "action": null
           }
         ],
-        "run_id": "ea54d17a-1f8d-49e0-ac00-ae724251c91d",
+        "run_id": "f6d88e10-6087-4bf2-9138-6acb85caace7",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1685,7 +1685,7 @@
             "action": "poll"
           }
         ],
-        "run_id": "5ff22041-6463-4fc9-8c2c-3c35214d9139",
+        "run_id": "f144b0e3-0691-4e2a-a3a5-fe7a51cb8c4e",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1782,7 +1782,7 @@
             "action": "read"
           }
         ],
-        "run_id": "6493418e-0f63-4d9c-917b-e73f81533689",
+        "run_id": "ea4410b4-cb34-47d8-8c23-7364b46c40fc",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -1893,7 +1893,7 @@
             "action": "read"
           }
         ],
-        "run_id": "5f5790bf-dca5-49ec-8d6e-34e06fad1232",
+        "run_id": "9a938426-1fa4-4047-9260-9e4c44dbef6b",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2007,7 +2007,7 @@
             "action": null
           }
         ],
-        "run_id": "c05fd4c3-6228-42dd-b108-2b6bf08a90c3",
+        "run_id": "3f4f5802-7eff-4b42-8752-f930fe8ba107",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2104,7 +2104,7 @@
             "action": "read"
           }
         ],
-        "run_id": "e73977f1-6516-423b-a088-e824e5f2adfb",
+        "run_id": "9374a230-d007-40f1-bb14-60e7d6337fe1",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2200,7 +2200,7 @@
             "action": null
           }
         ],
-        "run_id": "a33fa72e-4327-4c3a-8e49-db9d82ddca36",
+        "run_id": "9f9a0002-4ff7-4db0-86d6-c92a1bc4525e",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2297,7 +2297,7 @@
             "action": "poll"
           }
         ],
-        "run_id": "4773f468-6196-4bce-929d-0fc80e0ed82c",
+        "run_id": "6d4bf6b3-1385-4ce6-b04c-9891ac024071",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2339,7 +2339,7 @@
             "action": "request"
           }
         ],
-        "run_id": "0148248d-a57f-484e-b803-2e4f06e738e4",
+        "run_id": "123b761e-3257-45fc-9b30-98c42598fdb4",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2473,7 +2473,7 @@
             "action": null
           }
         ],
-        "run_id": "72296714-9a6f-4889-94f7-679bd8867e2b",
+        "run_id": "82bf0d4c-fa6e-4eb6-bedd-ae9b7861f592",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2626,7 +2626,7 @@
             "action": null
           }
         ],
-        "run_id": "73653e88-2293-4479-a5ea-9ac80bcd306a",
+        "run_id": "6cd0c13e-25d3-47b4-a570-d8c7a0254aaf",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2760,7 +2760,7 @@
             "action": null
           }
         ],
-        "run_id": "0d4cf820-5c98-40c3-8ea0-bf756b9103c5",
+        "run_id": "1d9076bc-bd41-4e77-996f-7b196f2d4436",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -2894,7 +2894,7 @@
             "action": null
           }
         ],
-        "run_id": "87631c21-2a2f-4c9e-89a2-c8d266b66765",
+        "run_id": "8d7a4bb8-433b-4c1d-a237-c54e8d6df041",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -3008,7 +3008,7 @@
             "action": null
           }
         ],
-        "run_id": "c5f58bfd-bc0d-496b-8e61-95d6d2bcdc75",
+        "run_id": "ed0451cd-e7ce-4086-9402-853a06de93a6",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -3078,7 +3078,7 @@
             "action": null
           }
         ],
-        "run_id": "758d133c-3361-4a8c-9a35-7d03d8ade230",
+        "run_id": "fef4b0b1-f178-46ec-b006-448b96ae2fcc",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -3192,7 +3192,7 @@
             "action": null
           }
         ],
-        "run_id": "3be5807c-800f-4c27-a517-33b39070388d",
+        "run_id": "8699ac17-3204-4dde-b5c8-46356a5d47df",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -3248,7 +3248,7 @@
             "action": null
           }
         ],
-        "run_id": "2f2871d4-81ef-4ae5-816f-0acfe6a83742",
+        "run_id": "01a53fc0-f071-4a1a-9d91-6ff14648145e",
         "continuations": [],
         "tool_dispositions": [],
         "usage_warnings": []
@@ -3257,14 +3257,14 @@
   ],
   "latency": {
     "workload": "actual guard.check over held-out fixture steps; excludes models/tools",
-    "embedding_initialization_ms": 0.009999,
-    "guard_initialization_mean_ms": 0.048655625,
-    "standalone_embedding_mean_ms": 0.11805275675675676,
+    "embedding_initialization_ms": 0.007173,
+    "guard_initialization_mean_ms": 0.06401584375,
+    "standalone_embedding_mean_ms": 0.13128562702702704,
     "standalone_embedding_workload": "same observable thought texts; separate from checks",
     "warm_checks": 185,
-    "warm_mean_ms": 0.20041997837837838,
-    "warm_median_ms": 0.171932,
-    "warm_max_ms": 0.671566,
+    "warm_mean_ms": 0.23727254054054053,
+    "warm_median_ms": 0.209813,
+    "warm_max_ms": 0.604451,
     "embedding_cost": "included in warm guard checks; backend is identified separately"
   },
   "limitations": [
