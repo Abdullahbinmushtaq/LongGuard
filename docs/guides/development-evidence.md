@@ -140,3 +140,6 @@ CrewAI and benchmark/release units. The current benchmark identifies source comm
 `ba62f8748ff82eb62f70ad115fe4dcb8a0815f49` from a clean checkout; its package-source digest
 matches the implemented source. Later evidence-only edits do not change detector code.
 Review the branch against `7b02104b47277cb5948c84e9ca4830e5f27df8c4`.
+
+The preview proposes qualifying the old blanket latency wording with measured workload/backend
+evidence. Maintainer approval of public quality/performance claims remains part of the release decision.

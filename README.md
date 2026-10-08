@@ -71,7 +71,7 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 <a id="why-longguard"></a>
 ## 💡 Why LongGuard?
 
-- ⚡ **Sub-millisecond overhead**: Evaluates in-flight agent steps without slowing down LLM inference.
+- ⚡ **Measured guard overhead**: Inspect the [hash-backend benchmark workload and timings](docs/guides/benchmarks.md); optional embedding and application latency require separate measurement.
 - 🔄 **4 loop detectors**: Catches tool repetition, semantic oscillation, dead-end drift, and token velocity spikes.
 - 🧭 **Reflect & Pivot prompt injection**: Guides stuck agents back on track before giving up.
 - 🛡️ **Zero unhandled crashes**: Gracefully terminates and preserves conversation state if recovery fails.
