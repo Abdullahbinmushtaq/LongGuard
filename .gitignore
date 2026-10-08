@@ -43,3 +43,8 @@ Thumbs.db
 # Documentation build output
 site/
 
+
+# Local release gate output (attach to drafts; not reusable source evidence)
+release-evidence.json
+release-tests.xml
+release_body.md

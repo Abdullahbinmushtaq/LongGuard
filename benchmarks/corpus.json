@@ -1,0 +1,2781 @@
+{
+  "revision": "synthetic-v1",
+  "license": "MIT",
+  "selected_size": 40,
+  "size_rationale": "Ten exploratory synthetic traces per detector; two calibration and eight held-out cases. Small, correlated examples are not statistical readiness proof.",
+  "assessment_unit": "one trace for its labeled detector",
+  "timely_detection_rule": "First detection on or before the final labeled step",
+  "labels_review": {
+    "status": "pending_human_review",
+    "author": "implementation agent",
+    "reviewer": null
+  },
+  "traces": [
+    {
+      "id": "tool_repeat-unchanged-search",
+      "family": "tool_repeat/unchanged-search",
+      "detector": "tool_repeat",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 5,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Search again",
+          "action": "search",
+          "action_input": {
+            "q": "same"
+          },
+          "observation": "no result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Search again",
+          "action": "search",
+          "action_input": {
+            "q": "same"
+          },
+          "observation": "no result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Search again",
+          "action": "search",
+          "action_input": {
+            "q": "same"
+          },
+          "observation": "no result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Search again",
+          "action": "search",
+          "action_input": {
+            "q": "same"
+          },
+          "observation": "no result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Search again",
+          "action": "search",
+          "action_input": {
+            "q": "same"
+          },
+          "observation": "no result",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-endless-503-retries",
+      "family": "tool_repeat/endless-503-retries",
+      "detector": "tool_repeat",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 6,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Retry request",
+          "action": "request",
+          "action_input": {
+            "url": "local"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Retry request",
+          "action": "request",
+          "action_input": {
+            "url": "local"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Retry request",
+          "action": "request",
+          "action_input": {
+            "url": "local"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Retry request",
+          "action": "request",
+          "action_input": {
+            "url": "local"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Retry request",
+          "action": "request",
+          "action_input": {
+            "url": "local"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Retry request",
+          "action": "request",
+          "action_input": {
+            "url": "local"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-redundant-write",
+      "family": "tool_repeat/redundant-write",
+      "detector": "tool_repeat",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 4,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Write unchanged record",
+          "action": "write",
+          "action_input": {
+            "record": 1
+          },
+          "observation": "unchanged",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Write unchanged record",
+          "action": "write",
+          "action_input": {
+            "record": 1
+          },
+          "observation": "unchanged",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Write unchanged record",
+          "action": "write",
+          "action_input": {
+            "record": 1
+          },
+          "observation": "unchanged",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Write unchanged record",
+          "action": "write",
+          "action_input": {
+            "record": 1
+          },
+          "observation": "unchanged",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-stuck-polling",
+      "family": "tool_repeat/stuck-polling",
+      "detector": "tool_repeat",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 7,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Poll stopped job",
+          "action": "poll",
+          "action_input": {
+            "job": 1
+          },
+          "observation": "failed",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-progressing-polling",
+      "family": "tool_repeat/progressing-polling",
+      "detector": "tool_repeat",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 6,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Poll running job",
+          "action": "poll",
+          "action_input": {
+            "job": 2
+          },
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Poll running job",
+          "action": "poll",
+          "action_input": {
+            "job": 2
+          },
+          "observation": "started",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Poll running job",
+          "action": "poll",
+          "action_input": {
+            "job": 2
+          },
+          "observation": "20%",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Poll running job",
+          "action": "poll",
+          "action_input": {
+            "job": 2
+          },
+          "observation": "40%",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Poll running job",
+          "action": "poll",
+          "action_input": {
+            "job": 2
+          },
+          "observation": "80%",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Poll running job",
+          "action": "poll",
+          "action_input": {
+            "job": 2
+          },
+          "observation": "done",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-useful-short-retry",
+      "family": "tool_repeat/useful-short-retry",
+      "detector": "tool_repeat",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 2,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Retry once",
+          "action": "request",
+          "action_input": {
+            "url": "retry"
+          },
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Succeeded",
+          "action": "request",
+          "action_input": {
+            "url": "retry"
+          },
+          "observation": "200",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-changing-queries",
+      "family": "tool_repeat/changing-queries",
+      "detector": "tool_repeat",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 5,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Investigate",
+          "action": "search",
+          "action_input": {
+            "q": "0"
+          },
+          "observation": "new result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Investigate",
+          "action": "search",
+          "action_input": {
+            "q": "1"
+          },
+          "observation": "new result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Investigate",
+          "action": "search",
+          "action_input": {
+            "q": "2"
+          },
+          "observation": "new result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Investigate",
+          "action": "search",
+          "action_input": {
+            "q": "3"
+          },
+          "observation": "new result",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Investigate",
+          "action": "search",
+          "action_input": {
+            "q": "4"
+          },
+          "observation": "new result",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-no-tools",
+      "family": "tool_repeat/no-tools",
+      "detector": "tool_repeat",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 3,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Explain",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Summarize",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Finish",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-identical-planning",
+      "family": "semantic_oscillation/identical-planning",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 10,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 10,
+          "thought": "Need to consider the same plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-alternating-options",
+      "family": "semantic_oscillation/alternating-options",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Choose option A",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Choose option B",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Choose option A",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Choose option B",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Choose option A",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Choose option B",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Choose option A",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Choose option B",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Choose option A",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 10,
+          "thought": "Choose option B",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 11,
+          "thought": "Choose option A",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 12,
+          "thought": "Choose option B",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-paraphrased-stall",
+      "family": "semantic_oscillation/paraphrased-stall",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Search is necessary",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "I should search",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Search again is needed",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Search is necessary",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "I should search",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Search again is needed",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Search is necessary",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "I should search",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Search again is needed",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 10,
+          "thought": "Search is necessary",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 11,
+          "thought": "I should search",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 12,
+          "thought": "Search again is needed",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-circular-planning",
+      "family": "semantic_oscillation/circular-planning",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Try the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Return to the old plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Reconsider the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Try the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Return to the old plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Reconsider the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Try the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Return to the old plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Reconsider the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 10,
+          "thought": "Try the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 11,
+          "thought": "Return to the old plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 12,
+          "thought": "Reconsider the initial plan",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-distinct-progress",
+      "family": "semantic_oscillation/distinct-progress",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 9,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyze cells",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Extract equations",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Validate chemistry",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Compute yield",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Resolve dates",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Check geography",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Sort invoices",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Inspect code",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Finish audit",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-similar-text-new-progress",
+      "family": "semantic_oscillation/similar-text-new-progress",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 10,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 0; new evidence 0",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 1; new evidence 1",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 2; new evidence 4",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 3; new evidence 9",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 4; new evidence 16",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 5; new evidence 25",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 6; new evidence 36",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 7; new evidence 49",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 8; new evidence 64",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 10,
+          "thought": "Validate the next record",
+          "action": null,
+          "action_input": null,
+          "observation": "Validated record 9; new evidence 81",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-short-reasoning",
+      "family": "semantic_oscillation/short-reasoning",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 4,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Inspect",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Learn",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Decide",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Finish",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-useful-retry",
+      "family": "semantic_oscillation/useful-retry",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 3,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Try connection",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Retry connection",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Connection restored",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-unchanged-poll",
+      "family": "dead_end_drift/unchanged-poll",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Need status",
+          "action": "poll",
+          "action_input": null,
+          "observation": "stuck",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-unchanged-error",
+      "family": "dead_end_drift/unchanged-error",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Retry access",
+          "action": "read",
+          "action_input": null,
+          "observation": "Access denied",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-useless-tool-switches",
+      "family": "dead_end_drift/useless-tool-switches",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 10,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Nothing works",
+          "action": "read",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Nothing works",
+          "action": "search",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Nothing works",
+          "action": "read",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Nothing works",
+          "action": "search",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Nothing works",
+          "action": "read",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Nothing works",
+          "action": "search",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Nothing works",
+          "action": "read",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Nothing works",
+          "action": "search",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 9,
+          "thought": "Nothing works",
+          "action": "read",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 10,
+          "thought": "Nothing works",
+          "action": "search",
+          "action_input": null,
+          "observation": "no evidence",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-no-output-progress",
+      "family": "dead_end_drift/no-output-progress",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Still waiting",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-changing-observations",
+      "family": "dead_end_drift/changing-observations",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "apples",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "bicycles",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "chemistry",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "diamonds",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "elephants",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "furniture",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "geography",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Inspect result",
+          "action": "read",
+          "action_input": null,
+          "observation": "hospitals",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-new-ideas",
+      "family": "dead_end_drift/new-ideas",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Analyze cells",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Extract equations",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Validate chemistry",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Compute yield",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Resolve dates",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Check geography",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Sort invoices",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Inspect code",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-legitimate-queued-poll",
+      "family": "dead_end_drift/legitimate-queued-poll",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 5,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 6,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 7,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 8,
+          "thought": "Wait for scheduled job",
+          "action": "poll",
+          "action_input": null,
+          "observation": "queued",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-short-useful-retries",
+      "family": "dead_end_drift/short-useful-retries",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 2,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Reconnect",
+          "action": "request",
+          "action_input": null,
+          "observation": "503",
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Connection restored",
+          "action": "request",
+          "action_input": null,
+          "observation": "200",
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-explosive-context",
+      "family": "token_velocity/explosive-context",
+      "detector": "token_velocity",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 6,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Context repeats",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Context repeats",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Context repeats",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Context repeats",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 8000
+        },
+        {
+          "step_number": 5,
+          "thought": "Context repeats",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 8000
+        },
+        {
+          "step_number": 6,
+          "thought": "Context repeats",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 8000
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-unexpected-growing-output",
+      "family": "token_velocity/unexpected-growing-output",
+      "detector": "token_velocity",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 7,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 600
+        },
+        {
+          "step_number": 5,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 1800
+        },
+        {
+          "step_number": 6,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 5400
+        },
+        {
+          "step_number": 7,
+          "thought": "Growing response",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 16200
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-persistent-spike",
+      "family": "token_velocity/persistent-spike",
+      "detector": "token_velocity",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 6,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Unexpected extra context",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 50
+        },
+        {
+          "step_number": 2,
+          "thought": "Unexpected extra context",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 50
+        },
+        {
+          "step_number": 3,
+          "thought": "Unexpected extra context",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 50
+        },
+        {
+          "step_number": 4,
+          "thought": "Unexpected extra context",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 3000
+        },
+        {
+          "step_number": 5,
+          "thought": "Unexpected extra context",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 3000
+        },
+        {
+          "step_number": 6,
+          "thought": "Unexpected extra context",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 3000
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-tool-payload-bloat",
+      "family": "token_velocity/tool-payload-bloat",
+      "detector": "token_velocity",
+      "positive": true,
+      "split": "evaluation",
+      "timely_by": 6,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Repeated raw tool payload",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 200
+        },
+        {
+          "step_number": 2,
+          "thought": "Repeated raw tool payload",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 200
+        },
+        {
+          "step_number": 3,
+          "thought": "Repeated raw tool payload",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 200
+        },
+        {
+          "step_number": 4,
+          "thought": "Repeated raw tool payload",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 10000
+        },
+        {
+          "step_number": 5,
+          "thought": "Repeated raw tool payload",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 10000
+        },
+        {
+          "step_number": 6,
+          "thought": "Repeated raw tool payload",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 10000
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-stable-usage",
+      "family": "token_velocity/stable-usage",
+      "detector": "token_velocity",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 8,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 2,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 3,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 4,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 5,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 6,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 7,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        },
+        {
+          "step_number": 8,
+          "thought": "Normal output",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 500
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-justified-large-output",
+      "family": "token_velocity/justified-large-output",
+      "detector": "token_velocity",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 4,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Prepare report",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Collect report data",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Finish research",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Requested complete report",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 7000
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-gradual-useful-growth",
+      "family": "token_velocity/gradual-useful-growth",
+      "detector": "token_velocity",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 7,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 2,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 3,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        },
+        {
+          "step_number": 4,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 150
+        },
+        {
+          "step_number": 5,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 180
+        },
+        {
+          "step_number": 6,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 225
+        },
+        {
+          "step_number": 7,
+          "thought": "Useful progress",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 275
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-missing-usage-boundary",
+      "family": "token_velocity/missing-usage-boundary",
+      "detector": "token_velocity",
+      "positive": false,
+      "split": "evaluation",
+      "timely_by": 4,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "No usage yet",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 0
+        },
+        {
+          "step_number": 2,
+          "thought": "No usage yet",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 0
+        },
+        {
+          "step_number": 3,
+          "thought": "No usage yet",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 0
+        },
+        {
+          "step_number": 4,
+          "thought": "Usage available",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 100
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-calibration-short-success",
+      "family": "tool_repeat/calibration-short-success",
+      "detector": "tool_repeat",
+      "positive": false,
+      "split": "calibration",
+      "timely_by": 1,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Finish arithmetic",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 30
+        }
+      ]
+    },
+    {
+      "id": "tool_repeat-calibration-long-failed-arithmetic",
+      "family": "tool_repeat/calibration-long-failed-arithmetic",
+      "detector": "tool_repeat",
+      "positive": true,
+      "split": "calibration",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 2,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 3,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 4,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 5,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 6,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 7,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 8,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 9,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 10,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 11,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 12,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-calibration-short-success",
+      "family": "semantic_oscillation/calibration-short-success",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "split": "calibration",
+      "timely_by": 1,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Finish arithmetic",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 30
+        }
+      ]
+    },
+    {
+      "id": "semantic_oscillation-calibration-long-failed-arithmetic",
+      "family": "semantic_oscillation/calibration-long-failed-arithmetic",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "split": "calibration",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 2,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 3,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 4,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 5,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 6,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 7,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 8,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 9,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 10,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 11,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 12,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-calibration-short-success",
+      "family": "dead_end_drift/calibration-short-success",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "split": "calibration",
+      "timely_by": 1,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Finish arithmetic",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 30
+        }
+      ]
+    },
+    {
+      "id": "dead_end_drift-calibration-long-failed-arithmetic",
+      "family": "dead_end_drift/calibration-long-failed-arithmetic",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "split": "calibration",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 2,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 3,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 4,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 5,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 6,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 7,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 8,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 9,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 10,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 11,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 12,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-calibration-short-success",
+      "family": "token_velocity/calibration-short-success",
+      "detector": "token_velocity",
+      "positive": false,
+      "split": "calibration",
+      "timely_by": 1,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Finish arithmetic",
+          "action": null,
+          "action_input": null,
+          "observation": null,
+          "tokens_used": 30
+        }
+      ]
+    },
+    {
+      "id": "token_velocity-calibration-long-failed-arithmetic",
+      "family": "token_velocity/calibration-long-failed-arithmetic",
+      "detector": "token_velocity",
+      "positive": true,
+      "split": "calibration",
+      "timely_by": 12,
+      "provenance": "Original synthetic local fixture; no production data",
+      "steps": [
+        {
+          "step_number": 1,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 2,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 3,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 40
+        },
+        {
+          "step_number": 4,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 5,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 6,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 7,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 8,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 9,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 10,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 11,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        },
+        {
+          "step_number": 12,
+          "thought": "Recompute identical arithmetic",
+          "action": "calculate",
+          "action_input": {
+            "expression": "1+1"
+          },
+          "observation": "unusable result",
+          "tokens_used": 2000
+        }
+      ]
+    }
+  ]
+}

@@ -144,6 +144,11 @@ print(guard.get_report().summary())
 
 ### 2. CrewAI Integration (1 Line)
 
+The development preview supports sequential, synchronous ReAct execution using
+`executor_class=CrewAgentExecutor`, with delegation, reasoning, planning and memory disabled.
+See [tested modes](https://endevsols.github.io/LongGuard/guides/compatibility/)
+and [the local example](examples/crewai_guarded.py).
+
 Protect multi-agent crews from delegation loops and repetitive tool calls:
 
 ```python
@@ -151,6 +156,7 @@ from crewai import Crew
 from longguard import GuardConfig
 from longguard.integrations.crewai import add_guard_to_crew
 
+# Configure each Agent with executor_class=CrewAgentExecutor and a ReAct LLM.
 crew = Crew(agents=[researcher, writer], tasks=[task1, task2])
 crew = add_guard_to_crew(crew, GuardConfig(model="gpt-4o", max_cost_usd=1.00))
 result = crew.kickoff()
@@ -314,7 +320,7 @@ config = GuardConfig(
 Run the test suite locally with `uv` or `pytest`:
 
 ```bash
-# Run all 255 unit & integration tests
+# Run the tests available for installed extras
 uv run pytest tests/ -v
 
 # Run with coverage report
@@ -340,3 +346,13 @@ For vulnerability disclosures, please review [SECURITY.md](https://github.com/EN
 ## 📄 License
 
 LongGuard is open-source software released under the [MIT License](https://github.com/ENDEVSOLS/LongGuard/blob/main/LICENSE).
+
+### Development preview: explicit LangGraph continuation
+
+`compile_guarded_graph(graph, checkpointer=...)` drives a supported synchronous
+agent/tools graph at saved node boundaries. `runner.resume(config, correction="...")`
+retains completed tool results and cumulative consumption. A hard-cap trip cannot resume.
+See [the runnable example](examples/langgraph_resume.py) and
+[the continuation contract](docs/integrations/langgraph.md).
+
+Detector-quality results are [provisional](docs/guides/benchmarks.md) pending label review.

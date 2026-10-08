@@ -1,0 +1,87 @@
+"""Execute release gates and write evidence, even if a gate fails."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.metadata
+import json
+import platform
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--offline", action="store_true", help="Build using cached dependencies")
+    args = parser.parse_args()
+    root = Path(__file__).resolve().parents[1]
+    junit_path = root / "release-tests.xml"
+    commands = {
+        "ruff": [
+            sys.executable,
+            "-m",
+            "ruff",
+            "check",
+            "src/",
+            "tests/",
+            "benchmarks/",
+            "scripts/",
+        ],
+        "mypy": [sys.executable, "-m", "mypy", "--python-version", "3.12", "src/longguard"],
+        "pytest": [
+            sys.executable,
+            "-m",
+            "pytest",
+            "tests/",
+            "-q",
+            "--cov=longguard",
+            "--cov-report=term-missing",
+            f"--junitxml={junit_path}",
+        ],
+        "docs": [sys.executable, "-m", "mkdocs", "build", "--strict"],
+        "build": ["uv", "build", *(["--offline"] if args.offline else [])],
+    }
+    record = {
+        "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+        "working_tree_dirty": bool(
+            subprocess.check_output(["git", "status", "--porcelain"], text=True).strip()
+        ),
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "dependencies": {},
+        "checks": {},
+        "artifacts_sha256": {},
+    }
+    # Release verification requires real optional framework dependencies.
+    for name in ("langgraph", "langchain-core", "langchain", "crewai"):
+        record["dependencies"][name] = importlib.metadata.version(name)
+    for name, command in commands.items():
+        completed = subprocess.run(command, cwd=root, text=True, capture_output=True)
+        record["checks"][name] = {
+            "command": command,
+            "exit_code": completed.returncode,
+            "stdout": completed.stdout,
+            "stderr": completed.stderr,
+        }
+        if name == "pytest" and completed.returncode == 0:
+            cases = list(ET.parse(junit_path).iter("testcase"))
+            for module in ("test_crewai_execution", "test_langgraph_resume"):
+                selected = [case for case in cases if module in case.get("classname", "")]
+                if not selected or any(case.find("skipped") is not None for case in selected):
+                    record["checks"][name]["exit_code"] = 1
+                    record["checks"][name]["stderr"] += f"Required real tests skipped: {module}"
+        print(name, record["checks"][name]["exit_code"], flush=True)
+        (root / "release-evidence.json").write_text(json.dumps(record, indent=2) + "\n")
+    for path in (root / "dist").glob("*"):
+        if path.is_file() and (path.name.endswith(".whl") or path.name.endswith(".tar.gz")):
+            record["artifacts_sha256"][path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    (root / "release-evidence.json").write_text(json.dumps(record, indent=2) + "\n")
+    if any(result["exit_code"] for result in record["checks"].values()):
+        raise SystemExit("Release checks failed; inspect release-evidence.json")
+
+
+if __name__ == "__main__":
+    main()
