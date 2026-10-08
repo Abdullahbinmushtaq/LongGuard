@@ -151,3 +151,8 @@ my_function.reset()
 if my_function.last_reflection_prompt:
     print("Injected pivot:", my_function.last_reflection_prompt)
 ```
+
+Once the circuit is OPEN, further calls stop before executing the wrapped body, using the
+configured `on_kill` policy. This also applies to post-observation functions and generators.
+Calling `.reset()` starts a fresh report and clears `.last_reflection_prompt` for synchronous,
+asynchronous and generator wrappers. Previously saved report references retain the prior run.

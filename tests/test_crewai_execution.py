@@ -184,3 +184,109 @@ def test_shared_guarded_agents_are_rejected_before_callbacks_are_changed():
         add_guard_to_crew(fresh)
     assert fresh.step_callback is prior
     assert not hasattr(fresh, "__longguard__")
+
+
+@pytest.mark.parametrize(
+    "owner,field,message",
+    [
+        ("task", "async_execution", "synchronous"),
+        ("crew", "planning", "planning/memory"),
+        ("crew", "memory", "planning/memory"),
+        ("agent", "allow_delegation", "delegation/reasoning"),
+        ("agent", "reasoning", "delegation/reasoning"),
+    ],
+)
+def test_unsupported_mode_changes_fail_before_a_model_or_tool_starts(owner, field, message):
+    crew, model, effects, _ = make_crew(finish_first=True)
+    target = {"task": crew.tasks[0], "crew": crew, "agent": crew.agents[0]}[owner]
+    setattr(target, field, True)
+    with pytest.raises(ValueError, match=message):
+        crew.kickoff()
+    assert model.calls == 0
+    assert effects == []
+    assert crew.__longguard__.report.total_steps == 0
+
+
+def test_native_tool_model_and_default_executor_require_a_supported_mode():
+    from crewai.experimental import AgentExecutor
+
+    crew, model, effects, _ = make_crew(finish_first=True)
+    crew.agents[0].executor_class = AgentExecutor
+    with pytest.raises(ValueError, match="CrewAgentExecutor"):
+        crew.kickoff()
+    crew.agents[0].executor_class = CrewAgentExecutor
+
+    class NativeModel(LocalModel):
+        def supports_function_calling(self):
+            return True
+
+    native = NativeModel(recover=False, finish_first=True)
+    crew.agents[0].llm = native
+    with pytest.raises(ValueError, match="native tool batches"):
+        crew.kickoff()
+    assert model.calls == native.calls == 0
+    assert effects == []
+
+
+def test_checkpoint_continuation_and_conflicting_reattachment_are_rejected():
+    from longguard.integrations.crewai import CrewGuard
+
+    crew, model, _, _ = make_crew(finish_first=True)
+    with pytest.raises(ValueError, match="checkpoint"):
+        crew.kickoff(from_checkpoint="saved-state")
+    with pytest.raises(ValueError, match="different"):
+        add_guard_to_crew(crew, GuardConfig(max_steps=1))
+    other = Crew(agents=crew.agents, tasks=crew.tasks, tracing=False)
+    with pytest.raises(ValueError, match="separate guard"):
+        add_guard_to_crew(other, guard=crew.__longguard__)
+    with pytest.raises(ValueError, match="different"):
+        add_guard_to_crew(crew, guard=CrewGuard())
+    assert model.calls == 0
+
+
+def test_missing_public_hook_api_is_reported_before_execution(monkeypatch):
+    import builtins
+
+    crew, model, effects, _ = make_crew(finish_first=True)
+    real_import = builtins.__import__
+
+    def without_hook_api(name, *args, **kwargs):
+        if name == "crewai.hooks.dispatch":
+            raise ImportError("Legacy CrewAI lacks this API")
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", without_hook_api)
+    with pytest.raises(ValueError, match="execution-scoped hook API"):
+        crew.kickoff()
+    assert model.calls == 0
+    assert effects == []
+
+
+def test_concurrent_kickoff_cannot_reset_the_active_budget():
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+
+    entered, release = Event(), Event()
+    crew, _, effects, _ = make_crew(finish_first=True)
+
+    class BlockingModel(LocalModel):
+        def call(self, messages, **kwargs):
+            entered.set()
+            assert release.wait(5)
+            return super().call(messages, **kwargs)
+
+    model = BlockingModel(recover=False, finish_first=True)
+    crew.agents[0].llm = model
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        future = pool.submit(crew.kickoff)
+        assert entered.wait(5)
+        try:
+            with pytest.raises(ValueError, match="Concurrent execution"):
+                crew.kickoff()
+        finally:
+            release.set()
+        assert future.result(timeout=5).raw == "finished"
+    assert model.calls == 1
+    assert effects == []
+    assert crew.__longguard__.get_report().total_steps == 1
+    assert "Total Steps: 1" in crew.__longguard__.summary()

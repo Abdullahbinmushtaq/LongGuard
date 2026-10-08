@@ -2,12 +2,8 @@
 
 import importlib.util
 import subprocess
-import sys
 
 import pytest
-
-if sys.version_info < (3, 11):
-    pytest.skip("Release scripts run on Python 3.12", allow_module_level=True)
 
 SPEC = importlib.util.spec_from_file_location("release_notes", "scripts/release_notes.py")
 release_notes = importlib.util.module_from_spec(SPEC)

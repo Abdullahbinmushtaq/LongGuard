@@ -282,3 +282,100 @@ def test_controlled_runner_rejects_double_wrapped_graph():
     add_guard_to_graph(graph)
     with pytest.raises(ValueError, match="unwrapped"):
         compile_guarded_graph(graph, checkpointer=InMemorySaver())
+
+
+def minimal_graph(agent=None, *, start="agent", extra_node=False):
+    graph = StateGraph(MessagesState)
+    graph.add_node("agent", agent or (lambda state: {"messages": [AIMessage(content="done")]}))
+    graph.add_node("tools", lambda state: {"messages": []})
+    graph.add_edge(START, start)
+    graph.add_conditional_edges("agent", lambda state: END, {"tools": "tools", END: END})
+    graph.add_edge("tools", "agent")
+    if extra_node:
+        graph.add_node("extra", lambda state: {"messages": []})
+        graph.add_edge(START, "extra")
+        graph.add_edge("extra", END)
+    return graph
+
+
+@pytest.mark.parametrize(
+    "settings,message",
+    [
+        ({"checkpointer": None}, "checkpointer"),
+        ({"start": "tools"}, "topology"),
+        ({"extra_node": True}, "only agent and tools"),
+    ],
+)
+def test_controller_rejects_unproven_persistence_and_topologies(settings, message):
+    saver = settings.get("checkpointer", InMemorySaver())
+    graph = minimal_graph(
+        start=settings.get("start", "agent"), extra_node=settings.get("extra_node", False)
+    )
+    with pytest.raises(ValueError, match=message):
+        compile_guarded_graph(graph, checkpointer=saver)
+
+
+@pytest.mark.parametrize(
+    "config,message",
+    [
+        ({}, "thread_id"),
+        ({"configurable": {"thread_id": ""}}, "thread_id"),
+        ({"configurable": {"thread_id": 123}}, "thread_id"),
+        ({"configurable": {"thread_id": "one", "checkpoint_ns": "branch"}}, "branching"),
+        ({"configurable": {"thread_id": "one", "checkpoint_id": "old"}}, "branching"),
+    ],
+)
+def test_invalid_thread_identifiers_and_checkpoint_branches_are_rejected(config, message):
+    runner, effects = build_graph()
+    with pytest.raises(ValueError, match=message):
+        runner.invoke({"messages": [HumanMessage(content="start")]}, config)
+    with pytest.raises(ValueError, match=message):
+        runner.get_state(config)
+    assert effects == []
+
+
+def test_missing_input_and_unknown_report_do_not_create_a_run():
+    runner, effects = build_graph()
+    config = {"configurable": {"thread_id": "empty"}}
+    with pytest.raises(ValueError, match="messages list"):
+        runner.invoke(None, config)
+    with pytest.raises(ValueError, match="Unknown thread"):
+        runner.get_report("empty")
+    assert effects == []
+
+
+def test_existing_checkpoint_cannot_restart_without_matching_live_guard():
+    saver = InMemorySaver()
+    first, _ = build_graph(checkpointer=saver)
+    config = {"configurable": {"thread_id": "existing"}}
+    first.invoke({"messages": [HumanMessage(content="finish")]}, config)
+    other, effects = build_graph(checkpointer=saver)
+    with pytest.raises(ValueError, match="no matching live guard"):
+        other.invoke({"messages": [HumanMessage(content="start")]}, config)
+    assert effects == []
+
+
+def test_missing_provider_usage_is_reported_as_an_estimate():
+    runner = compile_guarded_graph(minimal_graph(), checkpointer=InMemorySaver())
+    config = {"configurable": {"thread_id": "estimated"}}
+    result = runner.invoke({"messages": [HumanMessage(content="finish")]}, config)
+    assert result["messages"][-1].content == "done"
+    assert runner.get_report("estimated").total_tokens == 1
+    assert "estimated" in runner.get_report("estimated").usage_warnings[0]
+
+
+def test_node_failure_is_not_misrepresented_as_a_resumable_guard_trip():
+    effects = []
+
+    def failing_agent(state):
+        effects.append("attempt")
+        raise RuntimeError("Local model unavailable")
+
+    runner = compile_guarded_graph(minimal_graph(failing_agent), checkpointer=InMemorySaver())
+    config = {"configurable": {"thread_id": "failed"}}
+    with pytest.raises(RuntimeError, match="Local model unavailable"):
+        runner.invoke({"messages": [HumanMessage(content="start")]}, config)
+    with pytest.raises(ValueError, match="stopped checkpoint"):
+        runner.resume(config, correction="retry")
+    assert effects == ["attempt"]
+    assert runner.get_report("failed").kill_reason is None

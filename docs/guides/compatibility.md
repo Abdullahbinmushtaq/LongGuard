@@ -32,7 +32,7 @@ than registering global handlers.
 
 Latest-version results and exact commands are recorded in the development evidence after
 verification. Only executed checks establish support. CI runs the existing core Python
-3.10–3.12 Ubuntu/macOS matrix plus separate locked/newest framework jobs; configuration
+3.11–3.12 Ubuntu/macOS matrix plus separate locked/newest framework jobs; configuration
 of a CI job is not evidence that those platforms passed locally.
 
 ## Usage and side effects
@@ -52,7 +52,7 @@ effects or guarantee exactly-once behavior after an application crash. The suppo
 continuation avoids replaying completed tools at its saved boundary in the same process.
 
 Newest NumPy 2.5 typing stubs require Python 3.12 syntax. Framework jobs use strict MyPy
-with a Python 3.12 target; core jobs retain the Python 3.10 target and locked dependencies.
+with a Python 3.12 target; core jobs use the Python 3.11 target and locked dependencies.
 
 Controlled continuation was verified with LangGraph `InMemorySaver`; other saver implementations
 are unverified. Pass an unwrapped graph to the controller. Do not share guarded agents or the

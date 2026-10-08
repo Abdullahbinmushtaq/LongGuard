@@ -46,7 +46,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-evidence
-          path: release-evidence.json
+          path: |
+            release-evidence.json
+            release-coverage.json
       - name: Create reviewable GitHub release draft
         uses: softprops/action-gh-release@v2
         with:
@@ -56,6 +58,7 @@ jobs:
             dist/*.whl
             dist/*.tar.gz
             release-evidence.json
+            release-coverage.json
           body_path: release_body.md
           draft: true
           prerelease: ${{ steps.notes.outputs.prerelease == 'true' }}

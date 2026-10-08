@@ -6,9 +6,9 @@ import argparse
 import json
 import re
 import subprocess
+import tomllib
 from pathlib import Path
 
-import tomllib
 from packaging.version import Version
 
 

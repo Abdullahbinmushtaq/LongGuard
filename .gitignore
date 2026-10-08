@@ -47,4 +47,8 @@ site/
 # Local release gate output (attach to drafts; not reusable source evidence)
 release-evidence.json
 release-tests.xml
+release-coverage.json
 release_body.md
+
+# Local benchmark files and results
+/benchmarks/

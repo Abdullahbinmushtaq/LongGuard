@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
@@ -72,7 +72,9 @@ jobs:
         if: always()
         with:
           name: checks-${{ matrix.dependencies }}
-          path: release-evidence.json
+          path: |
+            release-evidence.json
+            release-coverage.json
       - name: Reproduce provisional benchmark
         run: uv run --no-sync python benchmarks/run.py --output /tmp/benchmark.json
       - uses: actions/upload-artifact@v4

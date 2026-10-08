@@ -39,6 +39,8 @@ def main() -> None:
             "-q",
             "--cov=longguard",
             "--cov-report=term-missing",
+            f"--cov-report=json:{root / 'release-coverage.json'}",
+            "--cov-fail-under=95",
             f"--junitxml={junit_path}",
         ],
         "docs": [sys.executable, "-m", "mkdocs", "build", "--strict"],
@@ -75,6 +77,9 @@ def main() -> None:
                     record["checks"][name]["stderr"] += f"Required real tests skipped: {module}"
         print(name, record["checks"][name]["exit_code"], flush=True)
         (root / "release-evidence.json").write_text(json.dumps(record, indent=2) + "\n")
+    coverage_path = root / "release-coverage.json"
+    if record["checks"]["pytest"]["exit_code"] == 0 and coverage_path.exists():
+        record["coverage"] = json.loads(coverage_path.read_text())["totals"]
     for path in (root / "dist").glob("*"):
         if path.is_file() and (path.name.endswith(".whl") or path.name.endswith(".tar.gz")):
             record["artifacts_sha256"][path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
