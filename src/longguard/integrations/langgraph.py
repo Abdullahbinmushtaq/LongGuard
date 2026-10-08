@@ -2,22 +2,41 @@
 
 from __future__ import annotations
 
+import inspect
 import logging
 from collections.abc import Callable
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 from ..config import GuardConfig
-from ..core.breaker import CircuitBreaker
+from ..core.breaker import CircuitBreaker, CircuitBreakerTrippedError
 from ..core.reporter import GuardReport
 from ..core.step import AgentStep
+from .messages import resolve_pending_tool_calls
+
+if TYPE_CHECKING:
+    from .graph_runner import GuardedGraph
 
 logger = logging.getLogger("longguard.langgraph")
+
+
+def _invoke_node(fn: Any, state: dict[str, Any], config: Any = None) -> dict[str, Any]:
+    """Call once; never retry a side effect after an internal TypeError."""
+    if hasattr(fn, "invoke"):
+        return cast(dict[str, Any], fn.invoke(state, config))
+    if config is not None:
+        try:
+            inspect.signature(fn).bind(state, config)
+        except (TypeError, ValueError):
+            return cast(dict[str, Any], fn(state))
+        return cast(dict[str, Any], fn(state, config))
+    return cast(dict[str, Any], fn(state))
 
 
 def _has_langchain_core() -> bool:
     """Check if langchain-core is available."""
     try:
         import langchain_core.messages  # noqa: F401
+
         return True
     except ImportError:
         return False
@@ -77,9 +96,8 @@ class LongGuard:
             ai_msg = None
             for msg in reversed(messages):
                 if isinstance(msg, dict):
-                    has_add_tool_calls = (
-                        isinstance(msg.get("additional_kwargs"), dict)
-                        and bool(msg["additional_kwargs"].get("tool_calls"))
+                    has_add_tool_calls = isinstance(msg.get("additional_kwargs"), dict) and bool(
+                        msg["additional_kwargs"].get("tool_calls")
                     )
                     if msg.get("type") == "ai" or bool(msg.get("tool_calls")) or has_add_tool_calls:
                         ai_msg = msg
@@ -145,6 +163,7 @@ class LongGuard:
                                 func = tc.get("function", {})
                                 action = func.get("name")
                                 import json
+
                                 try:
                                     action_input = json.loads(func.get("arguments", "{}"))
                                 except (json.JSONDecodeError, TypeError):
@@ -207,6 +226,7 @@ class LongGuard:
 
         if _has_langchain_core():
             from langchain_core.messages import SystemMessage
+
             messages.append(SystemMessage(content=prompt))
         else:
             # Fallback: add as a plain dict so tests without langchain-core work
@@ -230,13 +250,18 @@ class LongGuard:
 
             if decision.action == "kill":
                 # Graceful termination — add final message to state
-                logger.warning(
-                    "Node '%s': Agent killed. Reason: %s", name, decision.reason
+                logger.warning("Node '%s': Agent killed. Reason: %s", name, decision.reason)
+                cleanup = resolve_pending_tool_calls(
+                    list(state.get("messages", [])),
+                    decision.reason,
+                    protocol="langchain",
                 )
-                messages = list(state.get("messages", []))
+                self.breaker.report.tool_dispositions.extend(cleanup.dispositions)
+                messages = cleanup.messages
 
                 if _has_langchain_core():
                     from langchain_core.messages import AIMessage
+
                     messages.append(
                         AIMessage(
                             content=(
@@ -248,14 +273,16 @@ class LongGuard:
                     )
                 else:
                     # Fallback without langchain-core
-                    messages.append({
-                        "type": "ai",
-                        "content": (
-                            f"[LongGuard] Agent terminated: {decision.reason}. "
-                            "The agent was stuck in a reasoning loop and could not "
-                            "recover after reflection attempts."
-                        ),
-                    })
+                    messages.append(
+                        {
+                            "type": "ai",
+                            "content": (
+                                f"[LongGuard] Agent terminated: {decision.reason}. "
+                                "The agent was stuck in a reasoning loop and could not "
+                                "recover after reflection attempts."
+                            ),
+                        }
+                    )
 
                 return {
                     **state,
@@ -274,21 +301,7 @@ class LongGuard:
                 state = self._inject_pivot(state, decision.inject_prompt or "")
 
             # Run the original node function
-            res: Any
-            if hasattr(fn, "invoke"):
-                if config is not None:
-                    res = fn.invoke(state, config)
-                else:
-                    res = fn.invoke(state)
-            elif config is not None:
-                try:
-                    res = fn(state, config)
-                except TypeError:
-                    res = fn(state)
-            else:
-                res = fn(state)
-
-            return cast(dict[str, Any], res)
+            return _invoke_node(fn, state, config)
 
         # Preserve the original function's metadata
         guarded_fn.__name__ = f"guarded_{name}"
@@ -306,6 +319,20 @@ class LongGuard:
         self.breaker.reset()
         self._step_counter = 0
 
+    def wrap_dispatch(self, name: str, fn: Callable[..., Any]) -> Callable[..., Any]:
+        """Gate excluded tool/action nodes without observing or counting them."""
+
+        def gated(state: dict[str, Any], config: Any = None) -> dict[str, Any]:
+            if self.breaker.is_open or state.get("__longguard_terminated__"):
+                raise CircuitBreakerTrippedError(
+                    self.breaker.report.kill_reason or state.get("__longguard_reason__", "stopped"),
+                    self.breaker.report,
+                )
+            return _invoke_node(fn, state, config)
+
+        gated.__name__ = f"guarded_{name}"
+        return gated
+
 
 def add_guard_to_graph(
     graph: Any,
@@ -313,6 +340,11 @@ def add_guard_to_graph(
     exclude_nodes: list[str] | None = None,
 ) -> Any:
     """Wrap every node in a LangGraph StateGraph with LongGuard hooks."""
+    attached = getattr(graph, "__longguard__", None)
+    if isinstance(attached, LongGuard):
+        if config is not None and config != attached.config:
+            raise ValueError("A different guard/configuration is already attached")
+        return graph
     guard = LongGuard(config)
 
     if exclude_nodes is None:
@@ -336,7 +368,7 @@ def add_guard_to_graph(
 
     # Wrap each node
     for node_name in list(nodes_dict.keys()):
-        if node_name in exclude_nodes:
+        if node_name in {"__start__", "__end__"}:
             continue
 
         node_obj = nodes_dict[node_name]
@@ -344,18 +376,51 @@ def add_guard_to_graph(
         # Check if it's a modern LangGraph NodeSpec object
         if hasattr(node_obj, "runnable"):
             original_fn = node_obj.runnable
-            wrapped = guard.wrap_node(node_name, original_fn)
+            wrapped = (
+                guard.wrap_dispatch(node_name, original_fn)
+                if node_name in exclude_nodes
+                else guard.wrap_node(node_name, original_fn)
+            )
             try:
                 from langchain_core.runnables import RunnableLambda
+
                 node_obj.runnable = RunnableLambda(wrapped)
             except ImportError:
                 node_obj.runnable = wrapped
         else:
             # Fallback for older LangGraph versions
             original_fn = node_obj
-            nodes_dict[node_name] = guard.wrap_node(node_name, original_fn)
+            nodes_dict[node_name] = (
+                guard.wrap_dispatch(node_name, original_fn)
+                if node_name in exclude_nodes
+                else guard.wrap_node(node_name, original_fn)
+            )
 
     # Store guard reference on the graph for later access
     setattr(graph, "__longguard__", guard)
 
     return graph
+
+
+def compile_guarded_graph(
+    graph: Any,
+    config: GuardConfig | None = None,
+    *,
+    checkpointer: Any,
+    agent_node: str = "agent",
+    tool_node: str = "tools",
+) -> GuardedGraph:
+    """Compile supported synchronous agent/tools execution with explicit resume.
+
+    Existing ``add_guard_to_graph`` remains available. This additive controller
+    owns invocation and stops at persisted node boundaries before tool dispatch.
+    """
+    from .graph_runner import GuardedGraph
+
+    return GuardedGraph(
+        graph,
+        config,
+        checkpointer=checkpointer,
+        agent_node=agent_node,
+        tool_node=tool_node,
+    )

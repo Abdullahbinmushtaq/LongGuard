@@ -1,19 +1,10 @@
 """Tests for LangChain integration."""
 
-import sys
-from unittest.mock import MagicMock
-
 import pytest
 
 from longguard.config import GuardConfig
 from longguard.integrations.langchain import GuardedAgentExecutor, GuardTerminatedException
 
-
-class MockBaseCallbackHandler:
-    pass
-
-sys.modules["langchain_core"] = MagicMock()
-sys.modules["langchain_core.callbacks"] = MagicMock(BaseCallbackHandler=MockBaseCallbackHandler)
 
 class MockAgentAction:
     def __init__(self, tool="test_tool", tool_input="test_input", log="thought"):
