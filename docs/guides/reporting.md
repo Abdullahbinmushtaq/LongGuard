@@ -99,3 +99,15 @@ breaker = CircuitBreaker(
 # - "kill": agent killed
 # - "recovered": circuit recovered to CLOSED
 ```
+
+
+## Development-preview metadata
+
+Reports add `run_id`, `continuations`, `tool_dispositions`, and `usage_warnings`. Older saved
+reports still load with defaults for missing fields; existing field names and estimated-cost
+semantics remain. New metadata records explicit correction/granted allowance, original tool
+call IDs and skipped/running status, and missing/estimated usage. It contains no executable
+checkpoint and does not authorize continuation. Loading a report is inspection only.
+
+Reports can contain application messages and corrections. Keep them local and redact sensitive
+text before submitting a minimized reproduction. This release adds no automatic uploads.

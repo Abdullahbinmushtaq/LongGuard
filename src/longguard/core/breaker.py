@@ -141,6 +141,7 @@ class CircuitBreaker:
         self.state = BreakerState.CLOSED
         self._event_callback = event_callback
         self._reflection_count = 0
+        self._reflection_limit = self.config.max_reflections
         self._total_tokens = 0
         self._total_steps = 0
         self._cost_usd: float | None = None
@@ -245,6 +246,13 @@ class CircuitBreaker:
 
     def _check_unlocked(self, step: AgentStep) -> BreakerDecision:
         """Internal check logic — must be called with self._lock held."""
+        if self.state == BreakerState.OPEN:
+            return BreakerDecision(
+                action="kill",
+                reason=self._report.kill_reason or "breaker_already_open",
+                report=self._report,
+            )
+
         # Record the step in the report
         self._total_tokens += step.tokens_used
         self._total_steps += 1
@@ -265,9 +273,7 @@ class CircuitBreaker:
         if step_cost is not None:
             self._cost_usd = (self._cost_usd or 0.0) + step_cost
 
-        self._report.record_step(
-            step, self._total_tokens, self._total_steps, cost_delta=step_cost
-        )
+        self._report.record_step(step, self._total_tokens, self._total_steps, cost_delta=step_cost)
 
         # === Hard caps ===
 
@@ -278,16 +284,18 @@ class CircuitBreaker:
             and self._cost_usd >= self.config.max_cost_usd
         ):
             reason = (
-                f"cost_budget_exceeded: ${self._cost_usd:.4f} >= "
-                f"${self.config.max_cost_usd:.4f}"
+                f"cost_budget_exceeded: ${self._cost_usd:.4f} >= ${self.config.max_cost_usd:.4f}"
             )
             self.state = BreakerState.OPEN
             self._report.finalize(self.state, kill_reason=reason)
-            self._emit_event("kill", {
-                "reason": reason,
-                "estimated_cost_usd": self._cost_usd,
-                "max_cost_usd": self.config.max_cost_usd,
-            })
+            self._emit_event(
+                "kill",
+                {
+                    "reason": reason,
+                    "estimated_cost_usd": self._cost_usd,
+                    "max_cost_usd": self.config.max_cost_usd,
+                },
+            )
             return BreakerDecision(
                 action="kill",
                 reason=reason,
@@ -313,9 +321,7 @@ class CircuitBreaker:
 
         # Step count exceeded
         if self._total_steps > self.config.max_steps:
-            reason = (
-                f"max_steps_exceeded: {self._total_steps} > {self.config.max_steps}"
-            )
+            reason = f"max_steps_exceeded: {self._total_steps} > {self.config.max_steps}"
             self.state = BreakerState.OPEN
             self._report.finalize(self.state, kill_reason=reason)
             self._emit_event("kill", {"reason": reason, "total_steps": self._total_steps})
@@ -333,18 +339,19 @@ class CircuitBreaker:
                 result = detector.analyze(step)
                 if result.detected:
                     self._report.record_detection(step.step_number, result)
-                    self._emit_event("detection", {
-                        "detector": detector.name,
-                        "pattern": result.pattern,
-                        "confidence": result.confidence,
-                        "evidence": result.evidence,
-                    })
+                    self._emit_event(
+                        "detection",
+                        {
+                            "detector": detector.name,
+                            "pattern": result.pattern,
+                            "confidence": result.confidence,
+                            "evidence": result.evidence,
+                        },
+                    )
                     # Keep the highest-confidence detection
                     best_detection = best_detection.merge(result)
             except Exception as exc:
-                logger.warning(
-                    "Detector %s raised an exception: %s", detector.name, exc
-                )
+                logger.warning("Detector %s raised an exception: %s", detector.name, exc)
 
         # === State machine ===
         if best_detection.detected:
@@ -354,19 +361,18 @@ class CircuitBreaker:
         if self.state in (BreakerState.REFLECTING, BreakerState.HALF_OPEN):
             previous_state = self.state
             self.state = BreakerState.CLOSED
-            self._emit_event("recovered", {
-                "previous_state": previous_state.value,
-                "new_state": self.state.value,
-            })
-            logger.info(
-                "Circuit breaker recovered: %s → CLOSED", previous_state.value
+            self._emit_event(
+                "recovered",
+                {
+                    "previous_state": previous_state.value,
+                    "new_state": self.state.value,
+                },
             )
+            logger.info("Circuit breaker recovered: %s → CLOSED", previous_state.value)
 
         return BreakerDecision(action="continue", report=self._report)
 
-    def _handle_detection(
-        self, result: DetectionResult, step: AgentStep
-    ) -> BreakerDecision:
+    def _handle_detection(self, result: DetectionResult, step: AgentStep) -> BreakerDecision:
         """Handle a positive detection according to the state machine.
 
         Args:
@@ -377,17 +383,22 @@ class CircuitBreaker:
             A BreakerDecision (reflect or kill).
         """
         if self.state == BreakerState.CLOSED:
+            if self._reflection_count >= self._reflection_limit:
+                return self._kill(result, step)
             # First detection — inject Reflect & Pivot
             self.state = BreakerState.REFLECTING
             self._reflection_count += 1
             self._report.record_reflection()
             pivot_prompt = self.pivot.generate(result, step)
 
-            self._emit_event("reflect", {
-                "pattern": result.pattern,
-                "confidence": result.confidence,
-                "reflection_count": self._reflection_count,
-            })
+            self._emit_event(
+                "reflect",
+                {
+                    "pattern": result.pattern,
+                    "confidence": result.confidence,
+                    "reflection_count": self._reflection_count,
+                },
+            )
 
             logger.info(
                 "Loop detected (%s, confidence=%.0f%%). Injecting Reflect & Pivot (#%d).",
@@ -406,7 +417,7 @@ class CircuitBreaker:
         elif self.state == BreakerState.REFLECTING:
             # Already injected reflection — give one more chance (HALF_OPEN)
             # unless we've exhausted reflection attempts
-            if self._reflection_count >= self.config.max_reflections:
+            if self._reflection_count >= self._reflection_limit:
                 return self._kill(result, step)
 
             self.state = BreakerState.HALF_OPEN
@@ -414,12 +425,15 @@ class CircuitBreaker:
             self._report.record_reflection()
             pivot_prompt = self.pivot.generate(result, step)
 
-            self._emit_event("reflect", {
-                "pattern": result.pattern,
-                "confidence": result.confidence,
-                "reflection_count": self._reflection_count,
-                "state": "half_open",
-            })
+            self._emit_event(
+                "reflect",
+                {
+                    "pattern": result.pattern,
+                    "confidence": result.confidence,
+                    "reflection_count": self._reflection_count,
+                    "state": "half_open",
+                },
+            )
 
             logger.warning(
                 "Loop persists after reflection (%s). "
@@ -460,17 +474,19 @@ class CircuitBreaker:
         self.state = BreakerState.OPEN
         self._report.finalize(self.state, kill_reason=reason)
 
-        self._emit_event("kill", {
-            "reason": reason,
-            "pattern": result.pattern,
-            "confidence": result.confidence,
-            "total_tokens": self._total_tokens,
-            "total_steps": self._total_steps,
-        })
+        self._emit_event(
+            "kill",
+            {
+                "reason": reason,
+                "pattern": result.pattern,
+                "confidence": result.confidence,
+                "total_tokens": self._total_tokens,
+                "total_steps": self._total_steps,
+            },
+        )
 
         logger.error(
-            "Circuit breaker OPENED. Agent killed. Reason: %s. "
-            "Total tokens: %s, Total steps: %d",
+            "Circuit breaker OPENED. Agent killed. Reason: %s. Total tokens: %s, Total steps: %d",
             reason,
             f"{self._total_tokens:,}",
             self._total_steps,
@@ -515,6 +531,7 @@ class CircuitBreaker:
         with self._lock:
             self.state = BreakerState.CLOSED
             self._reflection_count = 0
+            self._reflection_limit = self.config.max_reflections
             self._total_tokens = 0
             self._total_steps = 0
             self._cost_usd = None
@@ -522,6 +539,66 @@ class CircuitBreaker:
             self._last_event_times.clear()
             for detector in self.detectors:
                 detector.reset()
+
+    def _validate_resume_unlocked(self, correction: str, additional_reflections: int) -> None:
+        if not isinstance(correction, str) or not correction.strip():
+            raise ValueError("Resume requires nonempty correction input")
+        if (
+            not isinstance(additional_reflections, int)
+            or isinstance(additional_reflections, bool)
+            or additional_reflections < 1
+        ):
+            raise ValueError("additional_reflections must be a positive integer")
+        reason = self._report.kill_reason or ""
+        if self.state != BreakerState.OPEN:
+            raise ValueError("Only a stopped circuit can resume")
+        exhausted = (
+            self._total_tokens >= self.config.max_tokens_per_run
+            or self._total_steps >= self.config.max_steps
+            or (
+                self.config.max_cost_usd is not None
+                and self._cost_usd is not None
+                and self._cost_usd >= self.config.max_cost_usd
+            )
+        )
+        if not reason.startswith("reflection_failed:") or exhausted:
+            raise ValueError("Cannot resume a hard-cap trip or exhausted allowance")
+
+    def validate_resume(self, *, correction: str, additional_reflections: int = 1) -> None:
+        """Validate continuation eligibility without changing accounting/state."""
+        with self._lock:
+            self._validate_resume_unlocked(correction, additional_reflections)
+
+    def resume(self, *, correction: str, additional_reflections: int = 1) -> GuardReport:
+        """Explicitly reopen recovery, retaining usage and recording new allowance.
+
+        The adapter/caller must restore a valid checkpoint and deliver correction.
+        Hard-cap trips and exhausted allowances cannot resume. A report alone
+        does not restore execution state; ``reset`` still starts a fresh run.
+        """
+        with self._lock:
+            self._validate_resume_unlocked(correction, additional_reflections)
+            reason = self._report.kill_reason or ""
+            self._reflection_limit = self._reflection_count + additional_reflections
+            self._report.continuations.append(
+                {
+                    "previous_reason": reason,
+                    "correction": correction,
+                    "total_steps": self._total_steps,
+                    "total_tokens": self._total_tokens,
+                    "estimated_cost_usd": self._cost_usd,
+                    "reflections_injected": self._reflection_count,
+                    "additional_reflections": additional_reflections,
+                    "reflection_limit": self._reflection_limit,
+                }
+            )
+            for detector in self.detectors:
+                detector.reset()
+            self.state = BreakerState.CLOSED
+            self._report.final_state = None
+            self._report.kill_reason = None
+            self._last_event_times.clear()
+            return self._report
 
     def add_detector(self, detector: AbstractLoopDetector) -> None:
         """Register a custom detector at runtime.

@@ -1,0 +1,11 @@
+{
+  "total_steps": 0,
+  "total_tokens": 0,
+  "estimated_cost_usd": null,
+  "model": null,
+  "detections": [],
+  "reflections_injected": 0,
+  "final_state": null,
+  "kill_reason": null,
+  "step_timeline": []
+}

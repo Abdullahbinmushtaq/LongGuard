@@ -166,3 +166,24 @@ A complete self-contained demo (runs without an API key via mock):
 ```bash
 python examples/openai_raw_guard.py
 ```
+
+
+## Stop with pending tool calls
+
+Converters preserve their existing first-action summary. Cleanup must inspect the original
+provider conversation to preserve every tool call identifier:
+
+```python
+from longguard.integrations.messages import resolve_pending_tool_calls
+
+# First stop dispatching new tools. Append the actual assistant response to messages.
+cleanup = resolve_pending_tool_calls(messages, decision.reason, protocol="openai")
+messages = cleanup.messages
+# Append cleanup.dispositions to your report if desired.
+```
+
+Use `protocol="anthropic"` for Anthropic tool-use blocks. Completed results remain unchanged;
+unstarted calls receive failed/skipped results and never a fabricated success. If calls are
+already running, pass `running_ids={...}`: they remain unresolved until real completion.
+Do not continue the provider conversation with unresolved running calls. The helper itself
+never cancels or executes tools, and assumes a valid conversation prefix.
