@@ -103,7 +103,7 @@ uv run --no-sync python scripts/verify_release.py
 uv run --no-sync python scripts/release_notes.py --tag v0.2.0.dev0   --evidence release-evidence.json --output release_body.md
 uv run --no-sync python examples/langgraph_resume.py
 uv run --no-sync python examples/crewai_guarded.py
-uv run --no-sync python benchmarks/run.py --output benchmarks/results/current-hash.json
+uv run --no-sync python tests/benchmarks/run.py --output tests/benchmarks/results/current-hash.json
 ```
 
 The check record captures actual commands, exit statuses, dependency/platform versions, dirty
@@ -120,7 +120,7 @@ benchmark/release changes. No main push, merge, stable tag or publication was pe
 
 Before promoting this preview to an RC or stable version:
 
-1. Review labels/split leakage in `benchmarks/LABEL_REVIEW.md`, then rerun the evaluation and
+1. Review labels/split leakage in `tests/benchmarks/LABEL_REVIEW.md`, then rerun the evaluation and
    record the quality decision, especially legitimate polling and semantic false positives.
 2. Execute hosted CI, including macOS; local Linux results do not prove that matrix.
 3. Review supported framework mode restrictions and deprecated CrewAI executor behavior.
@@ -168,3 +168,19 @@ evidence. Maintainer approval of public quality/performance claims remains part 
 The minimum supported Python version was subsequently raised to **3.11**. Python 3.10
 results above describe earlier compatibility checks; the current package metadata and CI
 require Python 3.11 or newer.
+
+## Benchmark location and CI repair — 2026-10-09
+
+Benchmark source, corpus, review instructions and saved results are tracked under
+`tests/benchmarks/`. CI, the benchmark test and reproduction instructions now use this
+location. Release lint checks `tests/`, which includes the benchmark runner. The runner
+finds its default corpus beside its script; it no longer depends on the old root folder.
+A regression test executes the CLI with its bundled default corpus.
+
+After this repair, the combined framework environment passed **403 tests** with
+**97.60% statement coverage**. Ruff, strict MyPy, strict MkDocs and the offline wheel/sdist
+build passed through `scripts/verify_release.py --offline`. Core-only Python 3.11 passed
+**366 tests**, with two optional framework modules skipped. The configured CI benchmark
+command evaluated 32 held-out traces with zero detector execution errors. These are local
+Linux results; hosted CI must rerun after the fix is pushed. Saved historical benchmark
+results retain their original source and command metadata.

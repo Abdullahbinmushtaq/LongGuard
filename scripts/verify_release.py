@@ -27,7 +27,6 @@ def main() -> None:
             "check",
             "src/",
             "tests/",
-            "benchmarks/",
             "scripts/",
         ],
         "mypy": [sys.executable, "-m", "mypy", "--python-version", "3.12", "src/longguard"],

@@ -49,6 +49,3 @@ release-evidence.json
 release-tests.xml
 release-coverage.json
 release_body.md
-
-# Local benchmark files and results
-/benchmarks/

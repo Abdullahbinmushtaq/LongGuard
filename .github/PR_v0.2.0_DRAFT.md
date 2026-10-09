@@ -13,8 +13,8 @@ tested public sequential ReAct executor; unsupported modes fail clearly.
 
 Validation: original baseline suite, Python 3.10/3.11 core checks, real framework contract tests,
 Ruff, strict MyPy, documentation/build checks, local examples and clean-install/upgrade checks.
-The latest combined suite passed 402 tests with 97.60% statement coverage; core-only Python 3.10/3.11
-checks and clean wheel/sdist/upgrade checks passed. Exact current results and commands are in `docs/guides/development-evidence.md` and generated
+The latest combined suite passed 403 tests with 97.60% statement coverage; current core-only
+Python 3.11 checks passed. Earlier clean wheel/sdist/upgrade checks are recorded separately. Exact current results and commands are in `docs/guides/development-evidence.md` and generated
 `release-evidence.json`. Hash/Jaccard benchmark counts are unchanged from baseline; weak classes
 are disclosed. Synthetic labels still require human review.
 
@@ -25,3 +25,7 @@ approval. Human labels/quality acceptance, hosted CI and candidate feedback rema
 The coverage follow-up adds 96 behavioral cases and enforces a 95% aggregate statement
 coverage minimum in full-framework CI and release verification. It also fixes decorator
 dispatch after termination and stale async/generator report references after reset.
+
+The CI path regression is repaired: benchmarks remain tracked under `tests/benchmarks/`,
+all active references use this location, and a new CLI regression checks the default corpus.
+The benchmark command and full release gates pass locally; hosted CI must rerun after pushing.

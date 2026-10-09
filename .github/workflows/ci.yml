@@ -76,7 +76,7 @@ jobs:
             release-evidence.json
             release-coverage.json
       - name: Reproduce provisional benchmark
-        run: uv run --no-sync python benchmarks/run.py --output /tmp/benchmark.json
+        run: uv run --no-sync python tests/benchmarks/run.py --output /tmp/benchmark.json
       - uses: actions/upload-artifact@v4
         with:
           name: benchmark-${{ matrix.dependencies }}

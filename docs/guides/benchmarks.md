@@ -10,7 +10,7 @@ From the repository root, install development dependencies and run:
 
 ```bash
 uv sync --extra dev
-uv run --no-sync python benchmarks/run.py --output benchmarks/results/current-hash.json
+uv run --no-sync python tests/benchmarks/run.py --output tests/benchmarks/results/current-hash.json
 ```
 
 The runner explicitly selects hash embeddings for semantic oscillation and Jaccard for
@@ -18,7 +18,7 @@ dead-end drift. An installed optional backend does not silently change this eval
 For sentence-transformers, supply a local model snapshot and its pinned revision:
 
 ```bash
-uv run --no-sync python benchmarks/run.py --backend sentence-transformers   --model-path /path/to/local/snapshot --model-revision COMMIT_SHA   --output /tmp/longguard-semantic-results.json
+uv run --no-sync python tests/benchmarks/run.py --backend sentence-transformers   --model-path /path/to/local/snapshot --model-revision COMMIT_SHA   --output /tmp/longguard-semantic-results.json
 ```
 
 No sentence-transformers model run is claimed in the preview evidence. Hash/Jaccard results
@@ -26,13 +26,13 @@ cannot establish transformer-backend quality.
 
 ## Corpus and assessment
 
-`benchmarks/corpus.json` contains 40 original synthetic traces under the repository MIT
+`tests/benchmarks/corpus.json` contains 40 original synthetic traces under the repository MIT
 license: two calibration and eight held-out evaluation traces per detector. Each evaluation
 group has four loop labels and four healthy labels. The corpus and labels were written
 before evaluation; related named families cannot cross splits. Traces remain small and
 correlated, so these counts are not production incident rates or independent statistical
 samples. The implementation author also authored the labels; a second human must review
-intent, timing and split separation using `benchmarks/LABEL_REVIEW.md`.
+intent, timing and split separation using `tests/benchmarks/LABEL_REVIEW.md`.
 
 The assessment unit is one trace for its assigned detector. A positive is timely if first
 detection is on or before its `timely_by` step. Calibration is excluded, not silently used
@@ -57,7 +57,7 @@ semantic oscillation, and justified large output can trigger token velocity. Swi
 unproductive actions can hide a dead end. These are exposed limitations, not reasons to
 silently remove negative traces or tune defaults on the evaluation split.
 
-`benchmarks/results/baseline-hash.json` evaluates source exported from release commit
+`tests/benchmarks/results/baseline-hash.json` evaluates source exported from release commit
 `7b02104b47277cb5948c84e9ca4830e5f27df8c4`; `current-hash.json` evaluates the edited preview.
 Each stores source and corpus hashes, command, environment, thresholds, backend, errors and
 per-trace outcomes. Working-tree flags describe the execution checkout; source paths and

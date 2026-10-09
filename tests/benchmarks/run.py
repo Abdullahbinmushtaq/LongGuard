@@ -233,7 +233,7 @@ def evaluate(args: argparse.Namespace) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--corpus", type=Path, default=Path("benchmarks/corpus.json"))
+    parser.add_argument("--corpus", type=Path, default=Path(__file__).with_name("corpus.json"))
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--backend", choices=("hash", "sentence-transformers"), default="hash")
     parser.add_argument("--model-path", type=Path)
