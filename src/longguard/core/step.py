@@ -215,7 +215,7 @@ class AgentStep:
             from longguard import AgentStep, CircuitBreaker, GuardConfig
 
             client = anthropic.Anthropic()
-            breaker = CircuitBreaker(GuardConfig(model="claude-3-5-sonnet"))
+            breaker = CircuitBreaker(GuardConfig(model="claude-sonnet-5-5"))
 
             for i in range(1, 31):
                 response = client.messages.create(...)

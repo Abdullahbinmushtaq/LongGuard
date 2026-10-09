@@ -80,7 +80,7 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 - 🧹 **Tool-call history cleanup**: Original-ID cleanup for LangChain, OpenAI, and Anthropic histories keeps the conversation protocol-consistent after a trip.
 - 🪄 **Universal `@guarded` decorator**: 1-line protection for arbitrary Python functions, generators, and async loops.
 - 🐍 **Raw client support**: Use LongGuard directly with `openai` or `anthropic` SDK — no framework needed.
-- 💵 **Dollar cost tracking**: Built-in pricing for 40+ models. Set `max_cost_usd` to hard-kill on budget overrun.
+- 💵 **Dollar cost tracking**: Built-in model pricing; use `list_supported_models()` to see the current registry. Set `max_cost_usd` to hard-kill on budget overrun.
 - 📊 **Full observability**: Detailed `GuardReport` with per-step telemetry. Save to JSON/YAML. Load for offline analysis.
 
 ---

@@ -13,9 +13,13 @@ Pricing Resolution Tiers
    prices are supplied, ``estimated_cost_usd`` will be ``None`` in the
    report and any ``max_cost_usd`` cap will be silently skipped.
 
-Prices are in **USD per token** (not per 1 000 tokens).
+Prices are in **USD per token** (not per 1 000 tokens). They cover standard,
+uncached text generation at each provider's base context tier. Cache reads
+and writes, batch/priority processing, long-context premiums, other modalities,
+and tool fees are not included. Use user-supplied prices for those cases.
 
-Last updated: 2026-09-05 (LongGuard v0.1.3)
+Last verified: 2026-10-09. Sources and availability decisions are recorded in
+``docs/guides/model-pricing-sources.md``.
 """
 
 from __future__ import annotations
@@ -33,65 +37,108 @@ class ModelPricing(TypedDict):
 # ---------------------------------------------------------------------------
 # Built-in pricing table
 # Keys are normalised model identifiers.  The lookup is case-insensitive and
-# strips leading/trailing whitespace.  For models with date suffixes (e.g.
-# "gpt-4o-2024-11-20") we also add the base name as an alias so either form
-# resolves correctly.
+# strips leading/trailing whitespace. Only explicitly listed aliases and
+# snapshots resolve: arbitrary date suffixes are not stripped because snapshots
+# can have different prices or be retired independently.
 #
-# Source: provider list prices as of 2026-09-05.
-# Always verify current prices at:
-#   https://openai.com/api/pricing/
-#   https://www.anthropic.com/pricing#anthropic-api
-#   https://ai.google.dev/pricing
+# Source: official provider list prices verified on 2026-10-09.
+# See docs/guides/model-pricing-sources.md for the complete source audit.
 # ---------------------------------------------------------------------------
 
 PRICING_TABLE: dict[str, ModelPricing] = {
     # ── OpenAI ───────────────────────────────────────────────────────────
+    # https://developers.openai.com/api/docs/pricing
+    # https://developers.openai.com/api/docs/models
+    "gpt-6-astra": {"input": 10e-6, "output": 50e-6},
+    "gpt-6.1-sol": {"input": 2e-6, "output": 10e-6},
+    "gpt-6-sol": {"input": 2e-6, "output": 10e-6},
+    "gpt-6-luna": {"input": 0.1e-6, "output": 0.5e-6},
+    "gpt-5.6": {"input": 4e-6, "output": 20e-6},
+    "gpt-5.6-sol": {"input": 4e-6, "output": 20e-6},
+    "gpt-5.6-terra": {"input": 2e-6, "output": 12e-6},
+    "gpt-5.6-luna": {"input": 0.2e-6, "output": 1.2e-6},
+    "gpt-5.5": {"input": 5e-6, "output": 30e-6},
+    "gpt-5.4": {"input": 2.5e-6, "output": 15e-6},
+    "gpt-5.4-mini": {"input": 0.75e-6, "output": 4.5e-6},
+    "gpt-5.4-nano": {"input": 0.2e-6, "output": 1.25e-6},
+    "gpt-5.2": {"input": 1.75e-6, "output": 14e-6},
+    "gpt-5.1": {"input": 1.25e-6, "output": 10e-6},
+    "gpt-5": {"input": 1.25e-6, "output": 10e-6},
+    "gpt-5-mini": {"input": 0.25e-6, "output": 2e-6},
+    "gpt-5-nano": {"input": 0.05e-6, "output": 0.4e-6},
+    "gpt-4.1": {"input": 2e-6, "output": 8e-6},
+    "gpt-4.1-2025-04-14": {"input": 2e-6, "output": 8e-6},
+    "gpt-4.1-mini": {"input": 0.4e-6, "output": 1.6e-6},
+    "gpt-4.1-nano": {"input": 0.1e-6, "output": 0.4e-6},
     "gpt-4o": {"input": 2.5e-6, "output": 10e-6},
+    "gpt-4o-2024-08-06": {"input": 2.5e-6, "output": 10e-6},
+    "gpt-4o-2024-11-20": {"input": 2.5e-6, "output": 10e-6},
     "gpt-4o-mini": {"input": 0.15e-6, "output": 0.6e-6},
     "gpt-4o-mini-2024-07-18": {"input": 0.15e-6, "output": 0.6e-6},
-    "gpt-4-turbo": {"input": 10e-6, "output": 30e-6},
-    "gpt-4-turbo-preview": {"input": 10e-6, "output": 30e-6},
-    "gpt-4": {"input": 30e-6, "output": 60e-6},
-    "gpt-3.5-turbo": {"input": 0.5e-6, "output": 1.5e-6},
-    "o1": {"input": 15e-6, "output": 60e-6},
-    "o1-mini": {"input": 3e-6, "output": 12e-6},
-    "o3": {"input": 10e-6, "output": 40e-6},
-    "o3-mini": {"input": 1.1e-6, "output": 4.4e-6},
-    "o4-mini": {"input": 1.1e-6, "output": 4.4e-6},
     # ── Anthropic ────────────────────────────────────────────────────────
-    "claude-3-5-sonnet": {"input": 3e-6, "output": 15e-6},
-    "claude-3-5-sonnet-20241022": {"input": 3e-6, "output": 15e-6},
-    "claude-3-5-haiku": {"input": 0.8e-6, "output": 4e-6},
-    "claude-3-5-haiku-20241022": {"input": 0.8e-6, "output": 4e-6},
-    "claude-3-opus": {"input": 15e-6, "output": 75e-6},
-    "claude-3-opus-20240229": {"input": 15e-6, "output": 75e-6},
-    "claude-3-sonnet": {"input": 3e-6, "output": 15e-6},
-    "claude-3-haiku": {"input": 0.25e-6, "output": 1.25e-6},
-    "claude-3-haiku-20240307": {"input": 0.25e-6, "output": 1.25e-6},
-    "claude-sonnet-4": {"input": 3e-6, "output": 15e-6},
-    "claude-opus-4": {"input": 15e-6, "output": 75e-6},
-    "claude-haiku-4": {"input": 0.8e-6, "output": 4e-6},
+    # https://platform.claude.com/docs/en/about-claude/pricing
+    "claude-fable-5-1": {"input": 10e-6, "output": 50e-6},
+    "claude-fable-5": {"input": 10e-6, "output": 50e-6},
+    "claude-opus-5-5": {"input": 4e-6, "output": 20e-6},
+    "claude-opus-5": {"input": 5e-6, "output": 25e-6},
+    "claude-opus-4-8": {"input": 5e-6, "output": 25e-6},
+    "claude-opus-4-7": {"input": 5e-6, "output": 25e-6},
+    "claude-opus-4-6": {"input": 5e-6, "output": 25e-6},
+    "claude-opus-4-5": {"input": 5e-6, "output": 25e-6},
+    "claude-opus-4-5-20251101": {"input": 5e-6, "output": 25e-6},
+    "claude-sonnet-5-5": {"input": 2e-6, "output": 10e-6},
+    "claude-sonnet-5": {"input": 2e-6, "output": 10e-6},
+    "claude-sonnet-4-6": {"input": 3e-6, "output": 15e-6},
+    "claude-sonnet-4-5": {"input": 3e-6, "output": 15e-6},
+    "claude-sonnet-4-5-20250929": {"input": 3e-6, "output": 15e-6},
+    # Haiku base rates apply to prompts with <=100K input tokens.
+    "claude-haiku-5-5": {"input": 0.1e-6, "output": 0.5e-6},
+    "claude-haiku-4-5": {"input": 1e-6, "output": 5e-6},
+    "claude-haiku-4-5-20251001": {"input": 1e-6, "output": 5e-6},
     # ── Google ───────────────────────────────────────────────────────────
-    "gemini-1.5-pro": {"input": 1.25e-6, "output": 5e-6},
-    "gemini-1.5-flash": {"input": 0.075e-6, "output": 0.3e-6},
-    "gemini-1.5-flash-8b": {"input": 0.0375e-6, "output": 0.15e-6},
-    "gemini-2.0-flash": {"input": 0.1e-6, "output": 0.4e-6},
-    "gemini-2.0-flash-lite": {"input": 0.075e-6, "output": 0.3e-6},
-    "gemini-2.5-pro": {"input": 1.25e-6, "output": 10e-6},
-    "gemini-2.5-flash": {"input": 0.075e-6, "output": 0.3e-6},
-    # ── Meta / Groq / Together (popular hosted Llama) ────────────────────
-    "llama-3.1-8b-instant": {"input": 0.05e-6, "output": 0.08e-6},
-    "llama-3.1-70b-versatile": {"input": 0.59e-6, "output": 0.79e-6},
-    "llama-3.3-70b-versatile": {"input": 0.59e-6, "output": 0.79e-6},
-    "llama-3.1-405b-reasoning": {"input": 2.0e-6, "output": 2.0e-6},
+    # https://ai.google.dev/gemini-api/docs/pricing
+    # Promotional rates for 3.6/3.7/3.8 Flash run through 2026-12-31.
+    "gemini-3.8-flash": {"input": 0.75e-6, "output": 3.75e-6},
+    "gemini-3.7-flash": {"input": 0.75e-6, "output": 3.75e-6},
+    "gemini-3.6-flash": {"input": 0.75e-6, "output": 3.75e-6},
+    "gemini-3.5-flash": {"input": 1.5e-6, "output": 9e-6},
+    "gemini-3.5-flash-lite": {"input": 0.3e-6, "output": 2.5e-6},
+    "gemini-3.1-pro-preview": {"input": 2e-6, "output": 12e-6},
+    "gemini-3.1-pro-preview-customtools": {"input": 2e-6, "output": 12e-6},
+    "gemini-3.1-flash-lite": {"input": 0.25e-6, "output": 1.5e-6},
+    "gemini-3-flash-preview": {"input": 0.5e-6, "output": 3e-6},
+
+    # ── Groq (provider-specific hosted model prices) ─────────────────────
+    # https://console.groq.com/docs/models
+    "openai/gpt-oss-120b": {"input": 0.15e-6, "output": 0.6e-6},
+    "openai/gpt-oss-20b": {"input": 0.075e-6, "output": 0.3e-6},
+    "qwen/qwen3.8-27b": {"input": 0.8e-6, "output": 4e-6},
     # ── Mistral ──────────────────────────────────────────────────────────
-    "mistral-large": {"input": 2e-6, "output": 6e-6},
-    "mistral-small": {"input": 0.1e-6, "output": 0.3e-6},
-    "mistral-nemo": {"input": 0.13e-6, "output": 0.13e-6},
-    "codestral": {"input": 0.2e-6, "output": 0.6e-6},
+    # https://docs.mistral.ai/inference/pricing
+    # Large 4 launch prices: 50% off for two weeks from 2026-10-06.
+    "mistral-large-4": {"input": 0.68e-6, "output": 2.09e-6},
+    "mistral-large-4-0": {"input": 0.68e-6, "output": 2.09e-6},
+    "mistral-large-2512": {"input": 0.5e-6, "output": 1.5e-6},
+    "mistral-large-latest": {"input": 0.5e-6, "output": 1.5e-6},
+    "mistral-medium-3-5": {"input": 1.5e-6, "output": 7.5e-6},
+    "mistral-medium-latest": {"input": 1.5e-6, "output": 7.5e-6},
+    "mistral-small-2603": {"input": 0.15e-6, "output": 0.6e-6},
+    "mistral-small-latest": {"input": 0.15e-6, "output": 0.6e-6},
+    "codestral-2508": {"input": 0.3e-6, "output": 0.9e-6},
+    "codestral-latest": {"input": 0.3e-6, "output": 0.9e-6},
+    "ministral-14b-2512": {"input": 0.2e-6, "output": 0.2e-6},
+    "ministral-14b-latest": {"input": 0.2e-6, "output": 0.2e-6},
+    "ministral-8b-2512": {"input": 0.15e-6, "output": 0.15e-6},
+    "ministral-8b-latest": {"input": 0.15e-6, "output": 0.15e-6},
+    "ministral-3b-2512": {"input": 0.1e-6, "output": 0.1e-6},
+    "ministral-3b-latest": {"input": 0.1e-6, "output": 0.1e-6},
     # ── Cohere ───────────────────────────────────────────────────────────
-    "command-r-plus": {"input": 2.5e-6, "output": 10e-6},
-    "command-r": {"input": 0.15e-6, "output": 0.6e-6},
+    # https://cohere.com/pricing
+    # The bare aliases target older, deprecated snapshots for existing users.
+
+    "command-r-08-2024": {"input": 0.15e-6, "output": 0.6e-6},
+    "command-r7b-12-2024": {"input": 0.0375e-6, "output": 0.15e-6},
+    "command-a-03-2025": {"input": 2.5e-6, "output": 10e-6},
 }
 
 
@@ -107,7 +154,7 @@ def lookup(model: str) -> ModelPricing | None:
     in the built-in table (use user-supplied prices in that case).
 
     Args:
-        model: Model identifier, e.g. ``"gpt-4o"`` or ``"claude-3-5-sonnet"``.
+        model: Model identifier, e.g. ``"gpt-6.1-sol"`` or ``"claude-sonnet-5-5"``.
 
     Returns:
         A :class:`ModelPricing` dict with ``"input"`` and ``"output"`` per-token
@@ -183,6 +230,6 @@ def list_supported_models() -> list[str]:
 
         from longguard.pricing import list_supported_models
         models = list_supported_models()
-        # ['claude-3-5-haiku', 'claude-3-5-haiku-20241022', ...]
+        # Includes 'claude-sonnet-5-5', 'gemini-3.8-flash', 'gpt-6.1-sol', ...
     """
     return sorted(PRICING_TABLE.keys())
