@@ -91,5 +91,8 @@ nav:
       - Universal @guarded Decorator: guides/decorator.md
       - Configuration: guides/configuration.md
       - GuardReport & Telemetry: guides/reporting.md
+      - Tested Compatibility: guides/compatibility.md
+      - Detector Benchmarks: guides/benchmarks.md
+      - Preview Development Evidence: guides/development-evidence.md
   - Contributing: contributing.md
   - Changelog: changelog.md

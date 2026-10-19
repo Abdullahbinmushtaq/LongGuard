@@ -84,7 +84,7 @@ from longguard import AgentStep, CircuitBreaker, GuardConfig
 
 client = anthropic.Anthropic()
 breaker = CircuitBreaker(GuardConfig(
-    model="claude-3-5-sonnet",
+    model="claude-sonnet-5-5",
     max_cost_usd=0.50,
     max_steps=30,
 ))
@@ -94,7 +94,7 @@ observation = None
 
 for i in range(1, 31):
     response = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
+        model="claude-sonnet-5-5",
         max_tokens=2048,
         tools=[...],
         messages=messages,
@@ -127,14 +127,25 @@ print(breaker.report.summary())
 
 ## Supported Models & Pricing
 
-LongGuard ships with a built-in pricing table for 40+ models updated as of v0.1.3:
+LongGuard's built-in pricing table was verified against official provider sources on
+2026-10-09. It uses standard, uncached text-token prices at the base context tier.
+See the [pricing sources and availability audit](../guides/model-pricing-sources.md)
+for supported providers, removals, retirement dates, and promotional price expiry dates.
+
+The selected registry excludes GPT-4/Turbo, GPT-3.5 Turbo, the o-series, Gemini 2.5,
+Command R+, and the March 2024 Command R releases. Use `list_supported_models()`
+to check whether a model has a built-in price.
+
+Long-context premiums, caching, batch/priority rates, multimodal usage, and tool fees
+require user-supplied prices or separate accounting. Removed model IDs return `None`;
+provide explicit rates when estimating historical usage or enterprise contracts.
 
 ```python
 from longguard import list_supported_models, compute_cost
 
 # List all models with known pricing
 print(list_supported_models())
-# ['claude-3-5-haiku', 'claude-3-5-sonnet', 'gemini-1.5-flash', 'gpt-4o', ...]
+# Includes 'claude-sonnet-5-5', 'gemini-3.8-flash', 'gpt-6.1-sol', ...
 
 # Compute cost for a specific workload
 cost = compute_cost("gpt-4o", input_tokens=10_000, output_tokens=3_000)
@@ -166,3 +177,24 @@ A complete self-contained demo (runs without an API key via mock):
 ```bash
 python examples/openai_raw_guard.py
 ```
+
+
+## Stop with pending tool calls
+
+Converters preserve their existing first-action summary. Cleanup must inspect the original
+provider conversation to preserve every tool call identifier:
+
+```python
+from longguard.integrations.messages import resolve_pending_tool_calls
+
+# First stop dispatching new tools. Append the actual assistant response to messages.
+cleanup = resolve_pending_tool_calls(messages, decision.reason, protocol="openai")
+messages = cleanup.messages
+# Append cleanup.dispositions to your report if desired.
+```
+
+Use `protocol="anthropic"` for Anthropic tool-use blocks. Completed results remain unchanged;
+unstarted calls receive failed/skipped results and never a fabricated success. If calls are
+already running, pass `running_ids={...}`: they remain unresolved until real completion.
+Do not continue the provider conversation with unresolved running calls. The helper itself
+never cancels or executes tools, and assumes a valid conversation prefix.

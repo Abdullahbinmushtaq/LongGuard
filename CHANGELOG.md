@@ -9,6 +9,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Minimum supported Python version is now 3.11; package metadata, tooling and CI match.
+
+## [0.2.0.dev0] - Development preview
+
+### Added
+
+- Explicit, cumulative same-process LangGraph continuation via `compile_guarded_graph`
+  and `GuardedGraph.resume`, with checkpoint identity checks and independent run reports.
+- Original-ID tool-call cleanup for LangChain, OpenAI and Anthropic histories.
+- Additive report fields for run identity, continuation history, skipped tools and usage warnings.
+- Reproducible held-out detector evaluation, raw counts, latency and baseline comparison.
+  Synthetic labels await human review; results are provisional.
+- Expanded public-contract regression coverage with a 95% aggregate statement coverage gate
+  in full-framework CI and release verification.
+- Real framework contract tests, credential-free examples, compatibility documentation and
+  version-matched release draft generation with executed check evidence.
+
+### Fixed
+
+- OPEN remains terminal on clean observations; repeated recoveries retain their reflection limit.
+- Guarded synchronous, asynchronous and generator calls stop before body execution when
+  the circuit is already OPEN; async/generator reset refreshes reports and reflection advice.
+- Excluded LangGraph tool nodes cannot dispatch after a trip.
+- Supported CrewAI synchronous ReAct executions receive recovery advice before the next model
+  request, preserve callbacks, count complete actions once and use execution-scoped hooks.
+
+### Compatibility and limits
+
+- Existing core imports, detector defaults, budget boundaries, report loading and optional extras
+  are preserved. Reports are telemetry, not executable checkpoints.
+- Controlled graph resume supports one synchronous agent/tools cycle in the same process.
+- CrewAI execution support is explicitly bounded to the tested sequential ReAct executor.
+  Unsupported execution modes fail clearly; callback-only `CrewGuard` remains available.
+- No stable release, PyPI publication, production savings or broad dependency-range claim.
+
 ---
 
 ## [0.1.4] - 2026-09-24

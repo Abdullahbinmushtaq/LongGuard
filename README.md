@@ -76,9 +76,11 @@ Together, the Long Suite covers the full AI lifecycle from data ingestion and re
 - 🧭 **Reflect & Pivot prompt injection**: Guides stuck agents back on track before giving up.
 - 🛡️ **Zero unhandled crashes**: Gracefully terminates and preserves conversation state if recovery fails.
 - 🔌 **1-line framework integrations**: Drop-in wrapper for LangGraph 1.0+ (`add_guard_to_graph`), LangChain (`GuardedAgentExecutor`), and CrewAI (`add_guard_to_crew`).
+- 🔁 **Safe LangGraph resume**: Explicitly continue an eligible stopped graph run via `compile_guarded_graph` & `GuardedGraph.resume` without replaying completed tool calls.
+- 🧹 **Tool-call history cleanup**: Original-ID cleanup for LangChain, OpenAI, and Anthropic histories keeps the conversation protocol-consistent after a trip.
 - 🪄 **Universal `@guarded` decorator**: 1-line protection for arbitrary Python functions, generators, and async loops.
 - 🐍 **Raw client support**: Use LongGuard directly with `openai` or `anthropic` SDK — no framework needed.
-- 💵 **Dollar cost tracking**: Built-in pricing for 40+ models. Set `max_cost_usd` to hard-kill on budget overrun.
+- 💵 **Dollar cost tracking**: Built-in model pricing; use `list_supported_models()` to see the current registry. Set `max_cost_usd` to hard-kill on budget overrun.
 - 📊 **Full observability**: Detailed `GuardReport` with per-step telemetry. Save to JSON/YAML. Load for offline analysis.
 
 ---
@@ -117,6 +119,8 @@ pip install longguard[embeddings]
 pip install longguard[all]
 ```
 
+> **Python 3.11+ required** as of v0.2.0.
+
 ### 1. LangGraph Integration (1 Line)
 
 Compatible with **LangGraph 1.0+** and modern multimodal models (Claude 3.7, Gemini 2.5, GPT-4o):
@@ -142,7 +146,31 @@ guard = workflow.__longguard__
 print(guard.get_report().summary())
 ```
 
-### 2. CrewAI Integration (1 Line)
+### 2. Safe LangGraph Resume (`compile_guarded_graph` + `GuardedGraph.resume`)
+
+Continue an eligible stopped run without replaying completed tool calls. State, tool-call IDs, and token accounting are all preserved:
+
+```python
+from langgraph.checkpoint.memory import MemorySaver
+from longguard import GuardConfig
+from longguard.integrations.langgraph import compile_guarded_graph
+
+checkpointer = MemorySaver()
+
+# compile_guarded_graph wraps your workflow and injects interrupts at node boundaries
+guarded_graph = compile_guarded_graph(workflow, GuardConfig(), checkpointer=checkpointer)
+
+# First invocation
+result = guarded_graph.invoke({"messages": [...]}, config={"configurable": {"thread_id": "t1"}})
+
+# Explicit, controlled resume — only valid after an eligible stopped checkpoint
+result = guarded_graph.resume("t1")
+
+# Each run gets an independent report
+print(guarded_graph.report("t1").summary())
+```
+
+### 3. CrewAI Integration (1 Line)
 
 Protect multi-agent crews from delegation loops and repetitive tool calls:
 
@@ -158,7 +186,9 @@ result = crew.kickoff()
 print(crew.__longguard__.summary())
 ```
 
-### 3. Universal `@guarded` Decorator
+> **Note:** CrewAI support is explicitly bounded to the tested sequential ReAct executor. Unsupported execution modes fail clearly; callback-only `CrewGuard` remains available for other topologies.
+
+### 4. Universal `@guarded` Decorator
 
 Add circuit breaking to any custom agent function or LLM call:
 
@@ -173,7 +203,7 @@ def run_agent_step(thought: str, action: str, action_input: dict, observation: s
 print(run_agent_step.report.summary())
 ```
 
-### 4. Raw OpenAI / Anthropic Client (No Framework Needed)
+### 5. Raw OpenAI / Anthropic Client (No Framework Needed)
 
 Call LongGuard directly from any `while` loop — works with plain `openai` or `anthropic` SDK:
 
@@ -213,7 +243,7 @@ print(breaker.report.summary())
 
 > For Anthropic: use `AgentStep.from_anthropic_response(response, step_number=i)` — same API, zero dependencies.
 
-### 5. Standalone / Custom Agent Loop
+### 6. Standalone / Custom Agent Loop
 
 If you run a custom `while` loop or proprietary agent orchestrator:
 
@@ -270,6 +300,7 @@ print(breaker.report.summary())
 | **Detects Semantic Reasoning Loops** | ❌ No | ✅ **Yes** |
 | **Detects Sudden Cost / Token Spikes** | ❌ No | ✅ **Yes** |
 | **Auto-Injects Recovery Prompts** | ❌ No | ✅ **Yes** |
+| **Safe Graph Resume (no tool replay)** | ❌ No | ✅ **Yes** |
 | **Exit Behavior** | 💥 Unhandled Exception (`Crash`) | 🛡️ **Graceful State Preservation** |
 | **Run Reporting & Telemetry** | ❌ No | ✅ **JSON & Summary Reports** |
 | **Configurable Thresholds** | ❌ Single integer | ✅ **Granular `GuardConfig`** |
@@ -296,7 +327,7 @@ config = GuardConfig(
     max_steps=30,                     # Maximum steps permitted
     max_reflections=2,                # Maximum recovery attempts before kill
 
-    # Dollar Cost Tracking (v0.1.3)
+    # Dollar Cost Tracking
     model="gpt-4o",                   # Enables built-in cost estimation
     max_cost_usd=0.50,                # Hard-kill if run exceeds $0.50
     # cost_per_input_token=2.5e-6,    # Override for unlisted models (USD/token)
@@ -305,29 +336,6 @@ config = GuardConfig(
 ```
 
 👉 *For detailed documentation on custom detectors, embedding backends, and LangSmith telemetry, see the [Full Documentation](https://endevsols.github.io/LongGuard/).*
-
----
-
-<a id="cicd-ready"></a>
-## 🧪 CI/CD Ready
-
-Run the test suite locally with `uv` or `pytest`:
-
-```bash
-# Run all 255 unit & integration tests
-uv run pytest tests/ -v
-
-# Run with coverage report
-uv run pytest tests/ --cov=longguard --cov-report=term-missing
-
-# Run code style & type checks
-uv run ruff check src/ tests/
-uv run mypy src/
-```
-
-Every push and pull request is automatically tested across **Python 3.10, 3.11, and 3.12** on both Ubuntu and macOS via GitHub Actions.
-
----
 
 ## 🤝 Contributing
 

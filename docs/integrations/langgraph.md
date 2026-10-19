@@ -78,3 +78,46 @@ After execution, the guard report is stored on the graph instance:
 guard = workflow.__longguard__
 print(guard.get_report().summary())
 ```
+
+
+## Explicit checkpoint continuation (development preview)
+
+For isolated runs and safe explicit continuation, use the additive controller:
+
+```python
+from langgraph.checkpoint.memory import InMemorySaver
+from longguard import GuardConfig, compile_guarded_graph
+
+# graph must have START -> agent -> tools/END and tools -> agent.
+runner = compile_guarded_graph(graph, GuardConfig(max_steps=30), checkpointer=InMemorySaver())
+config = {"configurable": {"thread_id": "job-1"}}
+result = runner.invoke({"messages": messages}, config)
+if result.get("__longguard_terminated__"):
+    print(runner.get_report("job-1").kill_reason)
+    # Human/application must explicitly choose correction; a hard-cap stop is ineligible.
+    result = runner.resume(config, correction="Use the existing results and finish",
+                           additional_reflections=1)
+```
+
+The controller stops at persisted node boundaries before dispatching a killed turn's tools.
+Original-ID pending calls receive truthful skipped/error results; completed results remain.
+Advice is delivered after pending tool results and before the next agent. Run a copyable
+stop/resume example with `python examples/langgraph_resume.py` after installing the graph extra.
+
+Only detector-recovery failures with budget remaining can resume. A nonempty correction and
+positive finite reflection grant are required. Tokens, steps, estimated cost, detections and
+reflection count remain cumulative. A changed checkpoint, implicit reinvocation, unknown run,
+completed run or concurrent continuation is rejected. A different `thread_id` starts a new run
+with an independent report. A loaded report or checkpoint alone cannot reconstruct the live
+guard in a different process.
+
+Support is synchronous, one agent node plus one tool node. Async, streaming, parallel graph
+nodes, subgraphs, branching and namespaces are outside the tested contract. See
+[tested compatibility](../guides/compatibility.md). Completed tools are not replayed by the
+supported resume path; arbitrary application crashes and external side effects still require
+application idempotency.
+
+The existing `add_guard_to_graph` retains its API. Excluded tool/action nodes now raise
+`CircuitBreakerTrippedError` if routing attempts to dispatch them after termination. Reusing
+that legacy graph shares one mutable guard; explicitly reset for a new run. Use the controlled
+runner for independent thread accounting.

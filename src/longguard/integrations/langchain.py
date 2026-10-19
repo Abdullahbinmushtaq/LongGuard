@@ -72,9 +72,7 @@ class GuardedAgentExecutor:
         self.breaker = CircuitBreaker(self.config)
         self._step_counter = 0
 
-    def _extract_step_from_action(
-        self, action: Any, observation: str
-    ) -> AgentStep:
+    def _extract_step_from_action(self, action: Any, observation: str) -> AgentStep:
         """Convert a LangChain AgentAction and observation into an AgentStep.
 
         Args:
@@ -190,7 +188,9 @@ class GuardedAgentExecutor:
         # Mutable container to hold the last action across callbacks
         _pending_action: list[Any] = []
 
-        class GuardCallback(BaseCallbackHandler):  # type: ignore[misc]
+        # With the optional framework absent MyPy sees this base as Any; with
+        # it installed the ignore is unnecessary. Keep both environments valid.
+        class GuardCallback(BaseCallbackHandler):  # type: ignore[misc, unused-ignore]
             """Callback that checks each agent step with LongGuard."""
 
             def on_agent_action(self, action: Any, **kw: Any) -> Any:
@@ -214,9 +214,7 @@ class GuardedAgentExecutor:
                 decision = guard.breaker.check(step)
 
                 if decision.action == "kill":
-                    raise GuardTerminatedException(
-                        decision.reason, decision.report
-                    )
+                    raise GuardTerminatedException(decision.reason, decision.report)
 
                 if decision.action == "reflect" and decision.inject_prompt:
                     logger.info(

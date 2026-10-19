@@ -41,7 +41,7 @@ LangChain integration::
     result = guarded.run("Your query here")
 """
 
-__version__ = "0.1.4"
+__version__ = "0.2.0.dev0"
 
 from typing import Any
 
@@ -76,14 +76,18 @@ from .pricing import PRICING_TABLE, compute_cost, list_supported_models
 
 def __getattr__(name: str) -> Any:
     """Lazy-load integration classes on first access."""
-    _langgraph_names = {"LongGuard", "add_guard_to_graph"}
+    _langgraph_names = {"LongGuard", "add_guard_to_graph", "compile_guarded_graph", "GuardedGraph"}
     _langchain_names = {"GuardedAgentExecutor", "GuardTerminatedException"}
     _strands_names = {"StrandsGuard", "GuardTerminatedError"}
     _crewai_names = {"CrewGuard", "add_guard_to_crew"}
 
     if name in _langgraph_names:
-        from .integrations.langgraph import LongGuard, add_guard_to_graph
-        return {"LongGuard": LongGuard, "add_guard_to_graph": add_guard_to_graph}[name]
+        from .integrations.graph_runner import GuardedGraph
+        from .integrations.langgraph import LongGuard, add_guard_to_graph, compile_guarded_graph
+        return {
+            "LongGuard": LongGuard, "add_guard_to_graph": add_guard_to_graph,
+            "compile_guarded_graph": compile_guarded_graph, "GuardedGraph": GuardedGraph,
+        }[name]
 
     if name in _langchain_names:
         from .integrations.langchain import GuardedAgentExecutor, GuardTerminatedException
@@ -144,6 +148,8 @@ __all__ = [
     # Integrations (lazy-loaded)
     "LongGuard",
     "add_guard_to_graph",
+    "compile_guarded_graph",
+    "GuardedGraph",
     "GuardedAgentExecutor",
     "GuardTerminatedException",
     "StrandsGuard",

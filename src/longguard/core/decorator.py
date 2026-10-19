@@ -19,6 +19,24 @@ from .step import AgentStep
 F = TypeVar("F", bound=Callable[..., Any])
 
 
+def _terminal_decision(breaker: CircuitBreaker) -> BreakerDecision | None:
+    """Gate callable dispatch without inventing another observed step."""
+    if breaker.is_open:
+        return BreakerDecision(
+            action="kill",
+            reason=breaker.report.kill_reason or "breaker_already_open",
+            report=breaker.report,
+        )
+    return None
+
+
+def _reset_callable(wrapper: Any, breaker: CircuitBreaker) -> None:
+    """Keep callable telemetry aligned with the new run created by reset."""
+    breaker.reset()
+    wrapper.report = breaker.report
+    wrapper.last_reflection_prompt = None
+
+
 def _extract_step_from_args_kwargs(
     args: tuple[Any, ...],
     kwargs: dict[str, Any],
@@ -155,6 +173,9 @@ class GuardedFunctionWrapper:
         return decision, None
 
     def __call__(self, *args: Any, **kwargs: Any) -> Any:
+        stopped = _terminal_decision(self.breaker)
+        if stopped is not None:
+            return self._handle_kill(stopped, args, kwargs)
         next_step_num = len(self.breaker.report.steps) + 1
 
         # 1. Custom or pre-call step extraction from args/kwargs
@@ -192,8 +213,7 @@ class GuardedFunctionWrapper:
 
 
 @overload
-def guarded(func: F) -> F:
-    ...
+def guarded(func: F) -> F: ...
 
 
 @overload
@@ -205,8 +225,7 @@ def guarded(
     on_kill: str | Callable[..., Any] = "raise",
     step_extractor: Callable[..., AgentStep | None] | None = None,
     **config_kwargs: Any,
-) -> Callable[[F], F]:
-    ...
+) -> Callable[[F], F]: ...
 
 
 def guarded(
@@ -265,6 +284,19 @@ def guarded(
                 gen = fn(*args, **kwargs)
                 wrapper_obj: Any = gen_wrapper
                 while True:
+                    stopped = _terminal_decision(cb)
+                    if stopped is not None:
+                        if callable(on_kill):
+                            yield on_kill(stopped, *args, **kwargs)
+                            return
+                        if on_kill == "return":
+                            yield f"Agent terminated by LongGuard: {stopped.reason}"
+                            return
+                        raise CircuitBreakerTrippedError(
+                            reason=stopped.reason,
+                            report=cb.report,
+                            decision=stopped,
+                        )
                     try:
                         item = next(gen)
                     except StopIteration as stop:
@@ -299,7 +331,9 @@ def guarded(
 
             gen_wrapper.breaker = cb  # type: ignore[attr-defined]
             gen_wrapper.report = cb.report  # type: ignore[attr-defined]
-            gen_wrapper.reset = cb.reset  # type: ignore[attr-defined]
+            gen_wrapper.reset = functools.partial(  # type: ignore[attr-defined]
+                _reset_callable, gen_wrapper, cb
+            )
             gen_wrapper.last_reflection_prompt = None  # type: ignore[attr-defined]
             return cast(F, gen_wrapper)
 
@@ -309,6 +343,17 @@ def guarded(
             @functools.wraps(fn)
             async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
                 wrapper_obj: Any = async_wrapper
+                stopped = _terminal_decision(cb)
+                if stopped is not None:
+                    if callable(on_kill):
+                        return on_kill(stopped, *args, **kwargs)
+                    if on_kill == "return":
+                        return f"Agent terminated by LongGuard: {stopped.reason}"
+                    raise CircuitBreakerTrippedError(
+                        reason=stopped.reason,
+                        report=cb.report,
+                        decision=stopped,
+                    )
                 next_step_num = len(cb.report.steps) + 1
                 pre_step = None
                 if step_extractor is not None:
@@ -340,9 +385,7 @@ def guarded(
                     if step_extractor is not None:
                         post_step = step_extractor(*args, result=result, **kwargs)
                     if post_step is None:
-                        post_step = _extract_step_from_result(
-                            result, step_number=next_step_num
-                        )
+                        post_step = _extract_step_from_result(result, step_number=next_step_num)
                     if post_step is not None:
                         decision = cb.check(post_step)
                         if decision.action == "reflect":
@@ -362,7 +405,9 @@ def guarded(
 
             async_wrapper.breaker = cb  # type: ignore[attr-defined]
             async_wrapper.report = cb.report  # type: ignore[attr-defined]
-            async_wrapper.reset = cb.reset  # type: ignore[attr-defined]
+            async_wrapper.reset = functools.partial(  # type: ignore[attr-defined]
+                _reset_callable, async_wrapper, cb
+            )
             async_wrapper.last_reflection_prompt = None  # type: ignore[attr-defined]
             return cast(F, async_wrapper)
 

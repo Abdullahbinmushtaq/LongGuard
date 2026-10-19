@@ -7,6 +7,7 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+from uuid import uuid4
 
 from .detectors.base import DetectionResult
 from .step import AgentStep
@@ -87,6 +88,10 @@ class GuardReport:
     step_timeline: list[dict[str, Any]] = field(default_factory=list)
     estimated_cost_usd: float | None = None
     model: str | None = None
+    run_id: str = field(default_factory=lambda: str(uuid4()))
+    continuations: list[dict[str, Any]] = field(default_factory=list)
+    tool_dispositions: list[dict[str, Any]] = field(default_factory=list)
+    usage_warnings: list[str] = field(default_factory=list)
 
     @property
     def steps(self) -> list[dict[str, Any]]:
@@ -127,12 +132,14 @@ class GuardReport:
             else:
                 self.estimated_cost_usd += cost_delta
 
-        self.step_timeline.append({
-            "step_number": step.step_number,
-            "tokens_used": step.tokens_used,
-            "latency_ms": step.latency_ms,
-            "action": step.action,
-        })
+        self.step_timeline.append(
+            {
+                "step_number": step.step_number,
+                "tokens_used": step.tokens_used,
+                "latency_ms": step.latency_ms,
+                "action": step.action,
+            }
+        )
 
     def record_detection(self, step_number: int, result: DetectionResult) -> None:
         """Record a detection event.
@@ -141,12 +148,14 @@ class GuardReport:
             step_number: The step at which detection occurred.
             result: The DetectionResult from the detector.
         """
-        self.detections.append(DetectionEvent(
-            step_number=step_number,
-            pattern=result.pattern,
-            confidence=result.confidence,
-            evidence=result.evidence,
-        ))
+        self.detections.append(
+            DetectionEvent(
+                step_number=step_number,
+                pattern=result.pattern,
+                confidence=result.confidence,
+                evidence=result.evidence,
+            )
+        )
 
     def record_reflection(self) -> None:
         """Record that a Reflect & Pivot prompt was injected."""
@@ -190,8 +199,7 @@ class GuardReport:
             lines.append("Detection Details:")
             for det in self.detections:
                 lines.append(
-                    f"  Step {det.step_number}: {det.pattern} "
-                    f"(confidence: {det.confidence:.0%})"
+                    f"  Step {det.step_number}: {det.pattern} (confidence: {det.confidence:.0%})"
                 )
         return "\n".join(lines)
 
@@ -211,6 +219,10 @@ class GuardReport:
             "final_state": self.final_state.value if self.final_state else None,
             "kill_reason": self.kill_reason,
             "step_timeline": self.step_timeline,
+            "run_id": self.run_id,
+            "continuations": self.continuations,
+            "tool_dispositions": self.tool_dispositions,
+            "usage_warnings": self.usage_warnings,
         }
 
     def to_json(self, indent: int = 2) -> str:
@@ -264,6 +276,7 @@ class GuardReport:
         if fmt == "yaml":
             try:
                 import yaml  # type: ignore[import-untyped]
+
                 content = yaml.dump(data, allow_unicode=True, sort_keys=False)
                 path.write_text(content, encoding="utf-8")
                 return
@@ -309,11 +322,11 @@ class GuardReport:
         if suffix in (".yaml", ".yml"):
             try:
                 import yaml
+
                 data: dict[str, Any] = yaml.safe_load(content)
             except ImportError as exc:
                 raise ImportError(
-                    "PyYAML is required to load YAML reports.  "
-                    "Install it with: pip install pyyaml"
+                    "PyYAML is required to load YAML reports.  Install it with: pip install pyyaml"
                 ) from exc
         elif suffix == ".json":
             data = json.loads(content)
@@ -323,8 +336,7 @@ class GuardReport:
                 data = json.loads(content)
             except json.JSONDecodeError as exc:
                 raise ValueError(
-                    f"Cannot determine format for {path}.  "
-                    "Use a .json or .yaml/.yml extension."
+                    f"Cannot determine format for {path}.  Use a .json or .yaml/.yml extension."
                 ) from exc
 
         return cls._from_dict(data)
@@ -351,6 +363,10 @@ class GuardReport:
             step_timeline=data.get("step_timeline", []),
             estimated_cost_usd=data.get("estimated_cost_usd"),
             model=data.get("model"),
+            run_id=data.get("run_id") or str(uuid4()),
+            continuations=data.get("continuations", []),
+            tool_dispositions=data.get("tool_dispositions", []),
+            usage_warnings=data.get("usage_warnings", []),
         )
         for det_data in data.get("detections", []):
             report.detections.append(DetectionEvent.from_dict(det_data))

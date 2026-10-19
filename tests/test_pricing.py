@@ -28,7 +28,7 @@ class TestLookup:
 
     def test_case_insensitive(self) -> None:
         assert lookup("GPT-4O") == lookup("gpt-4o")
-        assert lookup("Claude-3-5-Sonnet") == lookup("claude-3-5-sonnet")
+        assert lookup("Claude-Sonnet-5-5") == lookup("claude-sonnet-5-5")
 
     def test_leading_trailing_whitespace(self) -> None:
         assert lookup("  gpt-4o  ") == lookup("gpt-4o")
@@ -53,14 +53,63 @@ class TestLookup:
         assert mini["output"] < gpt4o["output"]
 
     def test_claude_opus_more_expensive_than_haiku(self) -> None:
-        opus = lookup("claude-3-opus")
-        haiku = lookup("claude-3-haiku")
+        opus = lookup("claude-opus-5-5")
+        haiku = lookup("claude-haiku-5-5")
         assert opus is not None and haiku is not None
         assert opus["input"] > haiku["input"]
 
-    def test_anthropic_dated_variants(self) -> None:
-        assert lookup("claude-3-5-sonnet-20241022") is not None
-        assert lookup("claude-3-haiku-20240307") is not None
+    def test_verified_snapshot_matches_base_model(self) -> None:
+        assert lookup("gpt-4o-mini-2024-07-18") == lookup("gpt-4o-mini")
+        assert lookup("gpt-4o-2024-11-20") == lookup("gpt-4o")
+
+    def test_unlisted_snapshot_does_not_inherit_base_price(self) -> None:
+        # GPT-4o's older snapshots can have different rates; do not guess.
+        assert lookup("gpt-4o-2024-05-13") is None
+
+    @pytest.mark.parametrize("model", [
+        "gpt-4-turbo-preview", "o1-mini",
+        "claude-3-5-sonnet", "claude-3-5-sonnet-20241022",
+        "claude-3-5-haiku", "claude-3-5-haiku-20241022",
+        "claude-3-opus", "claude-3-opus-20240229", "claude-3-sonnet",
+        "claude-3-haiku", "claude-3-haiku-20240307",
+        "claude-sonnet-4", "claude-opus-4", "claude-haiku-4",
+        "gemini-1.5-pro", "gemini-1.5-flash", "gemini-1.5-flash-8b",
+        "gemini-2.0-flash", "gemini-2.0-flash-lite",
+        "llama-3.1-70b-versatile", "llama-3.1-405b-reasoning",
+        "mistral-large", "mistral-small", "mistral-nemo", "codestral",
+        "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo",
+        "o1", "o3", "o3-mini", "o4-mini",
+        "gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite",
+        "command-r", "command-r-03-2024", "command-r-plus",
+        "command-r-plus-04-2024", "command-r-plus-08-2024",
+    ])
+    def test_excluded_models_have_no_builtin_price(self, model: str) -> None:
+        assert lookup(model) is None
+        assert compute_cost(model, 1000, 1000) is None
+
+    @pytest.mark.parametrize("model", [
+        "llama-3.1-8b-instant", "llama-3.3-70b-versatile",
+    ])
+    def test_contract_pricing_requires_user_supplied_rates(self, model: str) -> None:
+        assert lookup(model) is None
+        assert compute_cost(
+            model, 1000, 1000,
+            cost_per_input_token=0.05e-6,
+            cost_per_output_token=0.08e-6,
+        ) == pytest.approx(0.00013)
+
+    def test_current_claude_dated_alias(self) -> None:
+        assert lookup("claude-sonnet-4-5-20250929") == lookup("claude-sonnet-4-5")
+        assert lookup("claude-sonnet-4-5") is not None
+
+    def test_cohere_retained_models_have_distinct_prices(self) -> None:
+        assert compute_cost("command-r-08-2024", 1_000_000, 1_000_000) == pytest.approx(0.75)
+        assert compute_cost("command-r7b-12-2024", 1_000_000, 1_000_000) == pytest.approx(0.1875)
+        assert lookup("command-r-08-2024") != lookup("command-r7b-12-2024")
+
+    def test_mistral_latest_alias_is_large_3_not_large_4_preview(self) -> None:
+        assert lookup("mistral-large-latest") == lookup("mistral-large-2512")
+        assert lookup("mistral-large-latest") != lookup("mistral-large-4")
 
 
 # ===========================================================================
@@ -123,14 +172,31 @@ class TestComputeCost:
         assert cost == pytest.approx(1000 * 10e-6)
 
     def test_claude_sonnet_pricing(self) -> None:
-        cost = compute_cost("claude-3-5-sonnet", 500, 200)
-        expected = 500 * 3e-6 + 200 * 15e-6
+        cost = compute_cost("claude-sonnet-5-5", 500, 200)
+        expected = 500 * 2e-6 + 200 * 10e-6
         assert cost == pytest.approx(expected)
 
     def test_gemini_flash_pricing(self) -> None:
-        cost = compute_cost("gemini-1.5-flash", 50_000, 10_000)
-        expected = 50_000 * 0.075e-6 + 10_000 * 0.3e-6
+        cost = compute_cost("gemini-3.8-flash", 50_000, 10_000)
+        expected = 50_000 * 0.75e-6 + 10_000 * 3.75e-6
         assert cost == pytest.approx(expected)
+
+    @pytest.mark.parametrize(("model", "expected_usd"), [
+        ("gpt-4.1", 10.0),
+        ("gpt-6.1-sol", 12.0),
+        ("gpt-6-luna", 0.6),
+        ("claude-fable-5-1", 60.0),
+        ("gemini-3.8-flash", 4.5),
+        ("openai/gpt-oss-120b", 0.75),
+        ("codestral-2508", 1.2),
+        ("command-a-03-2025", 12.5),
+    ])
+    def test_verified_prices_use_per_token_units(
+        self, model: str, expected_usd: float,
+    ) -> None:
+        # One million input and output tokens catches wrong units, stale prices,
+        # and accidental selection of a provider's batch/cached price column.
+        assert compute_cost(model, 1_000_000, 1_000_000) == pytest.approx(expected_usd)
 
     def test_user_price_overrides_table_when_both_provided(self) -> None:
         user_cost = compute_cost(
@@ -163,8 +229,8 @@ class TestListSupportedModels:
     def test_contains_common_models(self) -> None:
         models = list_supported_models()
         assert "gpt-4o" in models
-        assert "claude-3-5-sonnet" in models
-        assert "gemini-1.5-pro" in models
+        assert "claude-sonnet-5-5" in models
+        assert "gemini-3.8-flash" in models
 
     def test_no_duplicates(self) -> None:
         models = list_supported_models()

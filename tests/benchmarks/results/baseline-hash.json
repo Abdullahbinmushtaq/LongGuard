@@ -1,0 +1,3149 @@
+{
+  "commit": "7b02104b47277cb5948c84e9ca4830e5f27df8c4",
+  "working_tree_dirty": true,
+  "source_sha256": "db63c9bfeb1ee9cdd5faaa2842a44f3f966bfcd8f36e4074d5553e786edad67e",
+  "dataset_revision": "synthetic-v1",
+  "dataset_sha256": "b040956615c582c5f7f651b8658b5d997f9fc416869b04166a23b8fdb34f5f9b",
+  "assessment_unit": "one trace for its labeled detector",
+  "timely_detection_rule": "First detection on or before the final labeled step",
+  "labels_review": {
+    "status": "pending_human_review",
+    "author": "implementation agent",
+    "reviewer": null
+  },
+  "thresholds": {
+    "tool_repeat_threshold": 3,
+    "tool_repeat_window": 6,
+    "semantic_variance_threshold": 0.15,
+    "semantic_window": 8,
+    "dead_end_threshold": 5,
+    "dead_end_progress_threshold": 0.6,
+    "token_velocity_multiplier": 3.0,
+    "token_velocity_window": 5,
+    "token_velocity_warmup": 3,
+    "max_tokens_per_run": 50000,
+    "max_steps": 30,
+    "max_reflections": 2,
+    "pivot_templates": {},
+    "log_level": "WARNING",
+    "emit_events": true,
+    "model": null,
+    "cost_per_input_token": null,
+    "cost_per_output_token": null,
+    "max_cost_usd": null
+  },
+  "backend": "hash",
+  "model_revision": null,
+  "model_path": null,
+  "seed": null,
+  "dependencies": {
+    "longguard": "0.1.4",
+    "numpy": "1.26.4",
+    "sentence-transformers": null,
+    "torch": null,
+    "langgraph": "1.2.11",
+    "crewai": null
+  },
+  "source_version": "0.1.4",
+  "source_path": "/tmp/longguard-baseline/src/longguard",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43"
+  },
+  "command": "/home/abdullah/Endevsols/OSS/LongGuard/LongGuard/.venv/bin/python benchmarks/run.py --output benchmarks/results/baseline-hash.json",
+  "detectors": {
+    "tool_repeat": {
+      "counts": {
+        "tp": 4,
+        "fp": 1,
+        "tn": 3,
+        "fn": 0
+      },
+      "errors": [],
+      "skipped": 0,
+      "precision": 0.8,
+      "recall": 1.0,
+      "false_positive_rate": 0.25,
+      "denominators": {
+        "flagged": 5,
+        "positive": 4,
+        "negative": 4
+      },
+      "evaluated": 8
+    },
+    "semantic_oscillation": {
+      "counts": {
+        "tp": 4,
+        "fp": 2,
+        "tn": 2,
+        "fn": 0
+      },
+      "errors": [],
+      "skipped": 0,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "false_positive_rate": 0.5,
+      "denominators": {
+        "flagged": 6,
+        "positive": 4,
+        "negative": 4
+      },
+      "evaluated": 8
+    },
+    "dead_end_drift": {
+      "counts": {
+        "tp": 3,
+        "fp": 1,
+        "tn": 3,
+        "fn": 1
+      },
+      "errors": [],
+      "skipped": 0,
+      "precision": 0.75,
+      "recall": 0.75,
+      "false_positive_rate": 0.25,
+      "denominators": {
+        "flagged": 4,
+        "positive": 4,
+        "negative": 4
+      },
+      "evaluated": 8
+    },
+    "token_velocity": {
+      "counts": {
+        "tp": 4,
+        "fp": 1,
+        "tn": 3,
+        "fn": 0
+      },
+      "errors": [],
+      "skipped": 0,
+      "precision": 0.8,
+      "recall": 1.0,
+      "false_positive_rate": 0.25,
+      "denominators": {
+        "flagged": 5,
+        "positive": 4,
+        "negative": 4
+      },
+      "evaluated": 8
+    }
+  },
+  "traces": [
+    {
+      "id": "tool_repeat-unchanged-search",
+      "detector": "tool_repeat",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 3,
+      "timely_by": 5,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "search",
+              "repeated_times": 3,
+              "hash": "cda81e656f5ca05b0dea0e76df7e4f196f98ccbfb40e3ba0ea9690c8e606784b",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "search",
+              "repeated_times": 4,
+              "hash": "cda81e656f5ca05b0dea0e76df7e4f196f98ccbfb40e3ba0ea9690c8e606784b",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "search",
+              "repeated_times": 5,
+              "hash": "cda81e656f5ca05b0dea0e76df7e4f196f98ccbfb40e3ba0ea9690c8e606784b",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-endless-503-retries",
+      "detector": "tool_repeat",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 3,
+      "timely_by": 6,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "request",
+              "repeated_times": 3,
+              "hash": "e74c93834ee02f659e5d9f03f78e4af5ca3f9d455ba41a00ce57f628c00f6295",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "request",
+              "repeated_times": 4,
+              "hash": "e74c93834ee02f659e5d9f03f78e4af5ca3f9d455ba41a00ce57f628c00f6295",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "request",
+              "repeated_times": 5,
+              "hash": "e74c93834ee02f659e5d9f03f78e4af5ca3f9d455ba41a00ce57f628c00f6295",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-redundant-write",
+      "detector": "tool_repeat",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 3,
+      "timely_by": 4,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 4,
+        "total_tokens": 400,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "write",
+              "repeated_times": 3,
+              "hash": "864aac073537da84ae2ea6c23478ab26308579517ba084dd6a2145600b0c9a31",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "write",
+              "repeated_times": 4,
+              "hash": "864aac073537da84ae2ea6c23478ab26308579517ba084dd6a2145600b0c9a31",
+              "window_size": 4
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "write"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "write"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "write"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "write"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-stuck-polling",
+      "detector": "tool_repeat",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 3,
+      "timely_by": 7,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 3,
+              "hash": "5b27d8fe4925a5c19434a225b02edd1905256888b8c0c65daec4e6e8550ab3ce",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 4,
+              "hash": "5b27d8fe4925a5c19434a225b02edd1905256888b8c0c65daec4e6e8550ab3ce",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 5,
+              "hash": "5b27d8fe4925a5c19434a225b02edd1905256888b8c0c65daec4e6e8550ab3ce",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-progressing-polling",
+      "detector": "tool_repeat",
+      "positive": false,
+      "classification": "fp",
+      "first_detection_step": 3,
+      "timely_by": 6,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 3,
+              "hash": "d24d333e2c0cbcc3c5dbf68c135868deb9ec2fbeea94cbf7cc46dd93e16c42c6",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 4,
+              "hash": "d24d333e2c0cbcc3c5dbf68c135868deb9ec2fbeea94cbf7cc46dd93e16c42c6",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 5,
+              "hash": "d24d333e2c0cbcc3c5dbf68c135868deb9ec2fbeea94cbf7cc46dd93e16c42c6",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-useful-short-retry",
+      "detector": "tool_repeat",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 2,
+      "circuit_actions": [
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 2,
+        "total_tokens": 200,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-changing-queries",
+      "detector": "tool_repeat",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 5,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tool_repeat-no-tools",
+      "detector": "tool_repeat",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 3,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 3,
+        "total_tokens": 300,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-identical-planning",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 8,
+      "timely_by": 10,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 700,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 7,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 7,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-alternating-options",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 8,
+      "timely_by": 12,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 700,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 7,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 7,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-paraphrased-stall",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 8,
+      "timely_by": 12,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: semantic_oscillation (confidence: 93%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 10,
+        "total_tokens": 1000,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 8,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.9271762890731583,
+            "evidence": {
+              "thought_variance": 0.010923556639026248,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 8
+            }
+          },
+          {
+            "step_number": 9,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.927842791894785,
+            "evidence": {
+              "thought_variance": 0.010823581215782245,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 9
+            }
+          },
+          {
+            "step_number": 10,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.9251463405593727,
+            "evidence": {
+              "thought_variance": 0.01122804891609409,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 10
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: semantic_oscillation (confidence: 93%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 8,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 9,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 10,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-circular-planning",
+      "detector": "semantic_oscillation",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 8,
+      "timely_by": 12,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: semantic_oscillation (confidence: 93%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 10,
+        "total_tokens": 1000,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 8,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.9283579672843808,
+            "evidence": {
+              "thought_variance": 0.010746304907342885,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 8
+            }
+          },
+          {
+            "step_number": 9,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.9294957758079294,
+            "evidence": {
+              "thought_variance": 0.010575633628810591,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 9
+            }
+          },
+          {
+            "step_number": 10,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.9292457775741819,
+            "evidence": {
+              "thought_variance": 0.010613133363872707,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 10
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: semantic_oscillation (confidence: 93%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 8,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 9,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 10,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-distinct-progress",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "classification": "fp",
+      "first_detection_step": 8,
+      "timely_by": 9,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 9,
+        "total_tokens": 900,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 8,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.907622437657836,
+            "evidence": {
+              "thought_variance": 0.013856634351324604,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 8
+            }
+          },
+          {
+            "step_number": 9,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.9085179417711131,
+            "evidence": {
+              "thought_variance": 0.013722308734333038,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 9
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 8,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 9,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-similar-text-new-progress",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "classification": "fp",
+      "first_detection_step": 8,
+      "timely_by": 10,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: semantic_oscillation (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 10,
+        "total_tokens": 1000,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 8,
+            "pattern": "semantic_oscillation",
+            "confidence": 1.0,
+            "evidence": {
+              "thought_variance": 2.8965356298611986e-34,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 8
+            }
+          },
+          {
+            "step_number": 9,
+            "pattern": "semantic_oscillation",
+            "confidence": 1.0,
+            "evidence": {
+              "thought_variance": 2.8965356298611986e-34,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 9
+            }
+          },
+          {
+            "step_number": 10,
+            "pattern": "semantic_oscillation",
+            "confidence": 1.0,
+            "evidence": {
+              "thought_variance": 2.8965356298611986e-34,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 10
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: semantic_oscillation (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 8,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 9,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 10,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-short-reasoning",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 4,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 4,
+        "total_tokens": 400,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "semantic_oscillation-useful-retry",
+      "detector": "semantic_oscillation",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 3,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 3,
+        "total_tokens": 300,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-unchanged-poll",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 6,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 3,
+              "hash": "9c301ffe8bb813d6756a137ea4caf5d28b9e7247f25d3e4a2557918d917d685c",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 4,
+              "hash": "9c301ffe8bb813d6756a137ea4caf5d28b9e7247f25d3e4a2557918d917d685c",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 5,
+              "hash": "9c301ffe8bb813d6756a137ea4caf5d28b9e7247f25d3e4a2557918d917d685c",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-unchanged-error",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 6,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 3,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 4,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 5,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-useless-tool-switches",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "classification": "fn",
+      "first_detection_step": null,
+      "timely_by": 10,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 700,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 3,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 5
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "search",
+              "repeated_times": 3,
+              "hash": "71fda640837e494560dbea0a0bde4e3bd95e55f0c3d0e372f143dfec9075e878",
+              "window_size": 6
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 3,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 6
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "search"
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-no-output-progress",
+      "detector": "dead_end_drift",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 5,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 700,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 7,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 7,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-changing-observations",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 3,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 4,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "read",
+              "repeated_times": 5,
+              "hash": "7fa39d4e72a832f7b2f97f0a427501f4f3df5acfce0c1140e1d3fec0cb817dfd",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "read"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-new-ideas",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 8,
+        "total_tokens": 800,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 8,
+            "pattern": "semantic_oscillation",
+            "confidence": 0.907622437657836,
+            "evidence": {
+              "thought_variance": 0.013856634351324604,
+              "threshold": 0.15,
+              "window_size": 8,
+              "steps_analyzed": 8
+            }
+          }
+        ],
+        "reflections_injected": 1,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 8,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-legitimate-queued-poll",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "classification": "fp",
+      "first_detection_step": 6,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 5,
+        "total_tokens": 500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 3,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 3,
+              "hash": "9c301ffe8bb813d6756a137ea4caf5d28b9e7247f25d3e4a2557918d917d685c",
+              "window_size": 3
+            }
+          },
+          {
+            "step_number": 4,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 4,
+              "hash": "9c301ffe8bb813d6756a137ea4caf5d28b9e7247f25d3e4a2557918d917d685c",
+              "window_size": 4
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "tool_repeat",
+            "confidence": 1.0,
+            "evidence": {
+              "tool": "poll",
+              "repeated_times": 5,
+              "hash": "9c301ffe8bb813d6756a137ea4caf5d28b9e7247f25d3e4a2557918d917d685c",
+              "window_size": 5
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: tool_repeat (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "poll"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dead_end_drift-short-useful-retries",
+      "detector": "dead_end_drift",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 2,
+      "circuit_actions": [
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 2,
+        "total_tokens": 200,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": "request"
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-explosive-context",
+      "detector": "token_velocity",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 4,
+      "timely_by": 6,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 6,
+        "total_tokens": 24300,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 4,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 2075.0,
+              "baseline_velocity": 100.0,
+              "velocity_ratio": 20.75,
+              "acceleration": 658.3333333333334,
+              "step_number": 4,
+              "tokens_this_step": 8000
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 3260.0,
+              "baseline_velocity": 100.0,
+              "velocity_ratio": 32.6,
+              "acceleration": 790.0,
+              "step_number": 5,
+              "tokens_this_step": 8000
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 4840.0,
+              "baseline_velocity": 100.0,
+              "velocity_ratio": 48.4,
+              "acceleration": 1185.0,
+              "step_number": 6,
+              "tokens_this_step": 8000
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 8000,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 8000,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 8000,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-unexpected-growing-output",
+      "detector": "token_velocity",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 5,
+      "timely_by": 7,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 24300,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 540.0,
+              "baseline_velocity": 137.5,
+              "velocity_ratio": 3.9272727272727272,
+              "acceleration": 110.0,
+              "step_number": 5,
+              "tokens_this_step": 1800
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 1600.0,
+              "baseline_velocity": 137.5,
+              "velocity_ratio": 11.636363636363637,
+              "acceleration": 375.0,
+              "step_number": 6,
+              "tokens_this_step": 5400
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 7,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 7,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 4820.0,
+              "baseline_velocity": 137.5,
+              "velocity_ratio": 35.054545454545455,
+              "acceleration": 1180.0,
+              "step_number": 7,
+              "tokens_this_step": 16200
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 600,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 1800,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 5400,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 16200,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-persistent-spike",
+      "detector": "token_velocity",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 4,
+      "timely_by": 6,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 6,
+        "total_tokens": 9150,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 4,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 787.5,
+              "baseline_velocity": 50.0,
+              "velocity_ratio": 15.75,
+              "acceleration": 245.83333333333334,
+              "step_number": 4,
+              "tokens_this_step": 3000
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 1230.0,
+              "baseline_velocity": 50.0,
+              "velocity_ratio": 24.6,
+              "acceleration": 295.0,
+              "step_number": 5,
+              "tokens_this_step": 3000
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 1820.0,
+              "baseline_velocity": 50.0,
+              "velocity_ratio": 36.4,
+              "acceleration": 442.5,
+              "step_number": 6,
+              "tokens_this_step": 3000
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 50,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 50,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 50,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 3000,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 3000,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 3000,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-tool-payload-bloat",
+      "detector": "token_velocity",
+      "positive": true,
+      "classification": "tp",
+      "first_detection_step": 4,
+      "timely_by": 6,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 6,
+        "total_tokens": 30600,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 4,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 2650.0,
+              "baseline_velocity": 200.0,
+              "velocity_ratio": 13.25,
+              "acceleration": 816.6666666666666,
+              "step_number": 4,
+              "tokens_this_step": 10000
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 5,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 4120.0,
+              "baseline_velocity": 200.0,
+              "velocity_ratio": 20.6,
+              "acceleration": 980.0,
+              "step_number": 5,
+              "tokens_this_step": 10000
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 6080.0,
+              "baseline_velocity": 200.0,
+              "velocity_ratio": 30.4,
+              "acceleration": 1470.0,
+              "step_number": 6,
+              "tokens_this_step": 10000
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 200,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 200,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 200,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 10000,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 10000,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 10000,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-stable-usage",
+      "detector": "token_velocity",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 8,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 3500,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 7,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 7,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 500,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-justified-large-output",
+      "detector": "token_velocity",
+      "positive": false,
+      "classification": "fp",
+      "first_detection_step": 4,
+      "timely_by": 4,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "reflect"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 4,
+        "total_tokens": 7300,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 4,
+            "pattern": "token_velocity",
+            "confidence": 1.0,
+            "evidence": {
+              "current_velocity": 1825.0,
+              "baseline_velocity": 100.0,
+              "velocity_ratio": 18.25,
+              "acceleration": 575.0,
+              "step_number": 4,
+              "tokens_this_step": 7000
+            }
+          }
+        ],
+        "reflections_injected": 1,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 7000,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-gradual-useful-growth",
+      "detector": "token_velocity",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 7,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue",
+        "reflect",
+        "reflect",
+        "kill"
+      ],
+      "circuit_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 7,
+        "total_tokens": 1130,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [
+          {
+            "step_number": 5,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 5,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 5,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 6,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 6,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 6,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          },
+          {
+            "step_number": 7,
+            "pattern": "dead_end_drift",
+            "confidence": 1.0,
+            "evidence": {
+              "steps_without_progress": 7,
+              "last_progressive_step": 0,
+              "total_steps_analyzed": 7,
+              "threshold": 5,
+              "similarity_mode": "lexical"
+            }
+          }
+        ],
+        "reflections_injected": 2,
+        "final_state": "open",
+        "kill_reason": "reflection_failed: dead_end_drift (confidence: 100%)",
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 150,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 5,
+            "tokens_used": 180,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 6,
+            "tokens_used": 225,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 7,
+            "tokens_used": 275,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "token_velocity-missing-usage-boundary",
+      "detector": "token_velocity",
+      "positive": false,
+      "classification": "tn",
+      "first_detection_step": null,
+      "timely_by": 4,
+      "circuit_actions": [
+        "continue",
+        "continue",
+        "continue",
+        "continue"
+      ],
+      "circuit_reason": null,
+      "recovery": null,
+      "circuit_report": {
+        "total_steps": 4,
+        "total_tokens": 100,
+        "estimated_cost_usd": null,
+        "model": null,
+        "detections": [],
+        "reflections_injected": 0,
+        "final_state": null,
+        "kill_reason": null,
+        "step_timeline": [
+          {
+            "step_number": 1,
+            "tokens_used": 0,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 2,
+            "tokens_used": 0,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 3,
+            "tokens_used": 0,
+            "latency_ms": 0.0,
+            "action": null
+          },
+          {
+            "step_number": 4,
+            "tokens_used": 100,
+            "latency_ms": 0.0,
+            "action": null
+          }
+        ]
+      }
+    }
+  ],
+  "latency": {
+    "workload": "actual guard.check over held-out fixture steps; excludes models/tools",
+    "embedding_initialization_ms": 0.003086,
+    "guard_initialization_mean_ms": 0.027910875,
+    "standalone_embedding_mean_ms": 0.11079827567567567,
+    "standalone_embedding_workload": "same observable thought texts; separate from checks",
+    "warm_checks": 185,
+    "warm_mean_ms": 0.18948800540540542,
+    "warm_median_ms": 0.161863,
+    "warm_max_ms": 0.386232,
+    "embedding_cost": "included in warm guard checks; backend is identified separately"
+  },
+  "limitations": [
+    "Small correlated synthetic corpus; counts are per trace, not independent production incidents.",
+    "Human label review is pending unless the corpus review record says otherwise.",
+    "Default thresholds are unchanged; calibration traces are excluded from held-out metrics.",
+    "Circuit outcomes use all detectors, independently of the trace's single target label.",
+    "Raw detector metrics do not prove actual provider/tool savings or production adoption."
+  ]
+}

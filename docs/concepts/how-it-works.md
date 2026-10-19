@@ -14,7 +14,7 @@ On every step of an agent's run, LongGuard checks all registered loop detectors 
 
 ### 1. `CLOSED` (Normal Operation)
 - The agent is executing without detected loops or abnormal token spikes.
-- All detectors run concurrently in sub-milliseconds.
+- Detectors run sequentially. [Benchmark timings](../guides/benchmarks.md) identify the tested backend and workload; model, tool and application latency are separate.
 - Every check returns `BreakerDecision(action="continue")`.
 
 ### 2. `REFLECTING` (First Loop Detected)
