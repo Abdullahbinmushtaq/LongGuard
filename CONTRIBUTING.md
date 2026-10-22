@@ -63,6 +63,9 @@ Ensure all tests, lint checks, and type checks pass before submitting a Pull Req
 
 Every PR merged into `main` automatically publishes a GitHub prerelease after
 the release checks pass. Closing a PR without merging does not release.
+The workflow runs on pushes to `main` and resolves the merged PR through the
+GitHub API. Pushes without a matching merged PR do not release. This supports
+fork contributions without checking out code in a `pull_request_target` event.
 For example, PR #42 with source version `0.2.0.dev0` releases `v0.2.0.dev42`.
 The PR number makes versions unique even when several PRs merge together.
 Development version ordering follows PR numbers, rather than merge times.
@@ -77,8 +80,12 @@ The existing release checks must pass before the GitHub release is published.
 Wheel, source distribution, and verification evidence are attached. This does
 not publish to PyPI. Tag-triggered and manually dispatched releases still create
 drafts. Failed automatic runs can be rerun; the same PR reuses its existing tag.
+To recover a previously missed release, open **Actions → Release merged PR →
+Run workflow**, select `main`, and enter the merged PR number. Manual recovery
+validates that the PR was merged into this repository's `main` branch.
 
-The workflows use the repository's `GITHUB_TOKEN` with `contents: write`;
+The workflows use the repository's `GITHUB_TOKEN` with `contents: write` and
+`pull-requests: read`;
 repository policies must permit that permission and creation of version tags.
 The reusable release job runs explicitly because tags pushed with `GITHUB_TOKEN`
 do not start another tag workflow. Enable GitHub Actions and merge these workflow
