@@ -7,13 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
-
-### Changed
-
-- Minimum supported Python version is now 3.11; package metadata, tooling and CI match.
-
-## [0.2.0.dev0] - Development preview
+## [0.2.0] - 2026-10-07
 
 ### Added
 
@@ -23,10 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additive report fields for run identity, continuation history, skipped tools and usage warnings.
 - Reproducible held-out detector evaluation, raw counts, latency and baseline comparison.
   Synthetic labels await human review; results are provisional.
-- Expanded public-contract regression coverage with a 95% aggregate statement coverage gate
-  in full-framework CI and release verification.
 - Real framework contract tests, credential-free examples, compatibility documentation and
   version-matched release draft generation with executed check evidence.
+
+### Changed
+
+- Minimum supported Python version is now 3.11; package metadata, tooling and CI match.
 
 ### Fixed
 
@@ -51,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.4] - 2026-09-24
 
 ### 🚀 Added
+
 - **CrewAI Integration (`CrewGuard` & `add_guard_to_crew`)**: Added native CrewAI support in `longguard.integrations.crewai`. Protects multi-agent crews from delegation loops and repetitive tool calls via `step_callback` and 1-line `add_guard_to_crew(crew)`.
 - **Universal `@guarded` Decorator**: Added `@guarded` decorator in `longguard.core.decorator` (exported top-level as `longguard.guarded`). Wraps arbitrary Python functions, SDK calls, generators, and async coroutines with circuit breaker protection in 1 line.
 - **PEP 561 Typing Support (`py.typed`)**: Added `src/longguard/py.typed` marker file and `Typing :: Typed` package classifier for strict IDE and static analysis support (MyPy, Pyright, VS Code Pylance).
@@ -58,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation & Theme Polish**: Enhanced MkDocs configuration with logo, favicon, GitHub repository icon, back-to-top navigation, tab synchronization, social footer, and new documentation guides for CrewAI and the `@guarded` decorator.
 
 ### 🔄 Changed
+
 - **PyPI Metadata & SEO Optimization**: Updated official documentation URL to `https://endevsols.github.io/LongGuard/`, expanded keywords to 15 high-intent discovery tags, and added `Operating System :: OS Independent` and `Topic :: System :: Monitoring` classifiers.
 - **README Links**: Converted relative markdown links to absolute GitHub URLs to prevent 404 errors when rendered on PyPI.
 - **Expanded Test Suite**: Added 16 new test cases (271 tests total, 100% passing) covering `@guarded` (sync, async, generators, cost limits, fallbacks) and `CrewGuard` (action/finish parsing, crew wrapping, callback chaining).
@@ -67,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.3] - 2026-09-05
 
 ### 🚀 Added
+
 - **Raw Client Integration (OpenAI & Anthropic)**: Added `AgentStep.from_openai_response()` and `AgentStep.from_anthropic_response()` class methods. Enables using LongGuard directly with standard `openai` and `anthropic` SDK client loops without requiring LangGraph or LangChain.
 - **Dollar Cost Tracking**: Built-in pricing engine (`PRICING_TABLE`, `compute_cost`, `list_supported_models`) supporting 40+ major LLM models (OpenAI GPT-4o/o1/o3, Anthropic Claude 3.5/4, Gemini 1.5/2.0/2.5, LLaMA 3.1/3.3, Mistral, Cohere).
 - **Budget Hard Cap (`max_cost_usd`)**: Configure hard dollar spend limits on agent runs (`max_cost_usd`) to immediately trip the circuit breaker and prevent runaway API bills.
@@ -75,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Runnable Examples & Docs**: Added standalone example in `examples/openai_raw_guard.py` and documentation in `docs/integrations/raw-client.md`.
 
 ### 🔄 Changed
+
 - **GuardReport Telemetry**: `GuardReport.summary()` now displays `Estimated Cost: $X.XXXX USD (model)` when cost tracking is configured.
 - **Expanded Test Suite**: Added 76 new test cases (255 tests total, 100% passing) covering SDK response parsing, pricing calculations, breaker cost limits, and report serialization.
 - **Automated GitHub Releases**: Enhanced GitHub Actions workflow to parse release notes directly from `CHANGELOG.md` and exclude internal build metadata from release assets.
@@ -84,6 +84,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2] - 2026-09-05
 
 ### 🎨 Changed
+
 - **Dual-Theme Branding**: Added dual-theme vector logos (`logo-light.svg` and `logo-dark.svg`) ensuring crystal-clear visibility across GitHub Dark, GitHub Light, and PyPI.
 - **Clean Architecture Diagram**: Replaced architecture diagram with high-contrast, professional SVG asset.
 - **Contact Updates**: Updated repository contact and security email addresses to `technology@endevsols.com`.
@@ -94,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1] - 2026-09-05
 
 ### 🚀 Added
+
 - **Initial Public Release** of LongGuard: Production-grade in-flight circuit breaker for autonomous AI agents.
 - **Circuit Breaker State Machine**: 4-state lifecycle (`CLOSED`, `REFLECTING`, `HALF_OPEN`, `OPEN`).
 - **4 Autonomous Loop Detectors**:

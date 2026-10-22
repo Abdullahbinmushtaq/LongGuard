@@ -1,6 +1,14 @@
 name: Release
 
 on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      publish:
+        default: false
+        type: boolean
   push:
     tags: ["v*"]
   workflow_dispatch:
@@ -49,7 +57,7 @@ jobs:
           path: |
             release-evidence.json
             release-coverage.json
-      - name: Create reviewable GitHub release draft
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.notes.outputs.tag }}
@@ -60,6 +68,6 @@ jobs:
             release-evidence.json
             release-coverage.json
           body_path: release_body.md
-          draft: true
+          draft: ${{ inputs.publish != true }}
           prerelease: ${{ steps.notes.outputs.prerelease == 'true' }}
           make_latest: ${{ steps.notes.outputs.latest }}

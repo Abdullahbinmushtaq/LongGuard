@@ -59,6 +59,31 @@ Ensure all tests, lint checks, and type checks pass before submitting a Pull Req
 
 ---
 
+## Automatic GitHub releases
+
+Every PR merged into `main` automatically publishes a GitHub prerelease after
+the release checks pass. Closing a PR without merging does not release.
+For example, PR #42 with source version `0.2.0.dev0` releases `v0.2.0.dev42`.
+The PR number makes versions unique even when several PRs merge together.
+Development version ordering follows PR numbers, rather than merge times.
+
+The release tag points to a commit whose parent is the PR's merged commit.
+That commit updates `pyproject.toml`, `__version__`, `uv.lock`, and the changelog.
+It is pushed only as a tag; no bot commits or branch protection bypass are
+needed on `main`. The branch keeps its development version. Automatic releases
+require an `X.Y.Z.devN` source version; stable releases remain a separate decision.
+
+The existing release checks must pass before the GitHub release is published.
+Wheel, source distribution, and verification evidence are attached. This does
+not publish to PyPI. Tag-triggered and manually dispatched releases still create
+drafts. Failed automatic runs can be rerun; the same PR reuses its existing tag.
+
+The workflows use the repository's `GITHUB_TOKEN` with `contents: write`;
+repository policies must permit that permission and creation of version tags.
+The reusable release job runs explicitly because tags pushed with `GITHUB_TOKEN`
+do not start another tag workflow. Enable GitHub Actions and merge these workflow
+files into the default branch to activate the automation.
+
 ## License
 
 By contributing to LongGuard, you agree that your contributions will be licensed under the [MIT License](LICENSE).

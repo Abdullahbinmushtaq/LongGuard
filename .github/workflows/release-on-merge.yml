@@ -1,0 +1,45 @@
+name: Release merged PR
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+# Different PRs have distinct versions and can release independently. Serialize
+# retries of the same PR without dropping releases for other merged PRs.
+concurrency:
+  group: release-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.prepare.outputs.tag }}
+    steps:
+      # Only execute code that has already been merged into the base repository.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare versioned release source
+        id: prepare
+        run: python scripts/prepare_merge_release.py
+      - name: Push release tag
+        env:
+          RELEASE_TAG: ${{ steps.prepare.outputs.tag }}
+        run: git push origin "refs/tags/$RELEASE_TAG"
+
+  release:
+    needs: prepare
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.prepare.outputs.tag }}
+      publish: true
