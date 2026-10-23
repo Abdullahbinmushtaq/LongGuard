@@ -62,7 +62,7 @@ jobs:
             }
 
             // Check if the PR has a 'release' label for stable release
-            const labels = pr.labels.map(l => l.name.toLowerCase());
+            const labels = (pr.labels || []).map(l => (typeof l === 'string' ? l : (l.name || '')).toLowerCase());
             const isStable = labels.includes('release');
             core.setOutput('stable', isStable ? 'true' : 'false');
             core.info(`Release mode: ${isStable ? 'STABLE' : 'dev'}`);
